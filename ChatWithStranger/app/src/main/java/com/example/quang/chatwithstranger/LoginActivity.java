@@ -141,7 +141,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
                         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         finish();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -188,6 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
                 break;
         }
     }
@@ -212,4 +212,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
     }
+
 }

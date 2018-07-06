@@ -119,6 +119,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnBackRe:
+                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(intent);
+                // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 finish();
                 break;
             case R.id.btnChooseImageRe:
@@ -142,8 +146,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
 
-                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_USER_CHECK_EXISTS,user);
-                Log.e("--------","checkExists");
+//                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_USER_CHECK_EXISTS,user);
+//                Log.e("--------","checkExists");
+
+
+
+                String currentTime = Calendar.getInstance().getTime().toString();
+//                String query = "INSERT INTO `tblusers` VALUES (null,'"+edtUsername.getText().toString()
+//                        +"','"+edtPassword.getText().toString()+"','','"+edtName.getText().toString()
+//                        +"','',"+gender+",0,'"+currentTime+"','"+url+"')";
+
+                String data1 = edtUsername.getText().toString()+"-"+edtPassword.getText().toString()+"-"+edtName.getText().toString()+"-"+String.valueOf(gender)+"-"+currentTime;
+                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_REQUEST_REGISTER,data1);
+
+
+
                 break;
         }
     }
@@ -167,19 +184,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         try {
             BitmapDrawable drawable = (BitmapDrawable) imgv.getDrawable();
             bmp = drawable.getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            return byteArray;
         }catch (Exception e){
-//            @SuppressLint({"NewApi", "LocalSuppress"}) BitmapDrawable drawable
-//                    = (BitmapDrawable) getDrawable(R.drawable.user_female);
-//            bmp = drawable.getBitmap();
             return null;
         }
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
     }
-
 
     private void resultRegister(final Object arg) {
         runOnUiThread(new Runnable() {
@@ -213,10 +225,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Log.e("--------","checkImage: "+arg);
                 String url = (String) arg;
                 if (gender == 1){
-                    if (url.equals("null"))
+                    if (url.equalsIgnoreCase("null"))
                         url = "/images/avatar/defaultMale.png";
                 }else if (gender == 0){
-                    if (url.equals("null"))
+                    if (url.equalsIgnoreCase("null"))
                         url = "/images/avatar/defaultFemale.png";
                 }
                 String currentTime = Calendar.getInstance().getTime().toString();
@@ -245,6 +257,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     snackbar.show();
                     return;
                 }else if (data.length() == 0){
+                    Log.e("++++++++","push");
                     Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_AVATAR,ImageView_To_Byte(imPhoto));
                 }
             }
@@ -263,4 +276,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
 }

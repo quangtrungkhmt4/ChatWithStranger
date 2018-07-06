@@ -60,6 +60,7 @@ function checkUserAndPass(userPass,socket)
 }
 
 function checkUserExists(user,socket){
+	console.log(user);
 	con.query("SELECT * FROM `tblusers` WHERE USER = '"+user+"'", function (err, result, fields) {
     if (err) throw err;
     	socket.emit('SERVER_SEND_RESULT_CHECK_EXISTS',result);
@@ -79,33 +80,44 @@ function getMilis()
 }
 
 function upImageToServer(arrByte, socket){
-
+	console.log(arrByte);
 	if (arrByte == null) {
 		socket.emit('SERVER_SEND_RESULT_AVATAR',"null");
-		console.log(arrByte);
+		//console.log(arrByte);
 	}else{
 		var url = getFileNameImage(socket.id);
 	  	fs.writeFile(url, arrByte, function(err) {
 	    if(err) {
 	        return console.log(err);
+	    }else{
+	    	socket.emit('SERVER_SEND_RESULT_AVATAR',"/"+url);
+	    	//console.log(url);
 	    }
-	    socket.emit('SERVER_SEND_RESULT_AVATAR',"/"+url);
-	    console.log(url);
 	  });
 	}
 }
 
 function registerUser(data,socket){
 	var arr = data.split("-");
-	con.query("INSERT INTO `tblusers` VALUES (null,'"+arr[0]+"','"+arr[1]+"','','"+arr[2]+"','',"+arr[3]+",0,'"+arr[4]+"','"+arr[5]+"')", function (err, result, fields) {
-    if (err){
-    	socket.emit('SERVER_SEND_RESULT_REGISTER',"false");
-    	console.log("false");
-    }else{
-    	socket.emit('SERVER_SEND_RESULT_REGISTER',"true");
-    	console.log("true");
-    }	
+	console.log(data);
+	con.query("SELECT * FROM `tblusers` WHERE USER = '"+arr[0]+"'", function (err, result, fields) {
+    if (err) throw err;
+    	console.log(result.length);
+    	if (result.length == 0) {
+    		con.query("INSERT INTO `tblusers` VALUES (null,'"+arr[0]+"','"+arr[1]+"','','"+arr[2]+"','',"+arr[3]+",0,'"+arr[4]+"','')", function (err, result, fields) {
+		    if (err){
+		    	socket.emit('SERVER_SEND_RESULT_REGISTER',"false");
+		    	console.log("false");
+		    }else{
+		    	socket.emit('SERVER_SEND_RESULT_REGISTER',"true");
+		    	console.log("true");
+		    }	
+		  });
+    	}
   });
+
+
+
 
  	// con.query(data, function (err, result, fields) {
   //   if (err) throw err;
