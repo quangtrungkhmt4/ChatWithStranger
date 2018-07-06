@@ -22,7 +22,7 @@
             <EditText
                 android:id="@+id/edtFullNameRe"
                 android:layout_marginTop="50dp"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:drawableLeft="@drawable/ic_info_white_30dp"
                 android:drawablePadding="20dp"
                 android:paddingBottom="10dp"
@@ -32,14 +32,14 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/background_edittext"
-                android:hint="Full name"
+                android:hint="@string/fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/edtUsernameRe"
                 android:layout_marginTop="30dp"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:drawableLeft="@drawable/ic_person_white_30dp"
                 android:drawablePadding="20dp"
                 android:paddingBottom="10dp"
@@ -49,13 +49,13 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/background_edittext"
-                android:hint="Username"
+                android:hint="@string/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <EditText
                 android:id="@+id/edtPasswordRe"
                 android:layout_marginTop="30dp"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:drawableLeft="@drawable/ic_lock_white_30dp"
                 android:drawablePadding="20dp"
                 android:paddingBottom="10dp"
@@ -65,7 +65,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/background_edittext"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content">
                 <com.example.quang.chatwithstranger.views.CustomTextView
                     android:textColor="@color/colorBackround"
-                    android:text="Gender: "
+                    android:text="@string/gender"
                     android:padding="20dp"
                     style="?android:attr/textAppearanceLarge"
                     android:layout_width="wrap_content"
@@ -95,11 +95,12 @@
                         android:paddingBottom="20dp"
                         style="?android:attr/textAppearanceLarge"
                         android:textColor="@color/colorBackround"
-                        android:text="Male"
+                        android:text="@string/male"
                         android:buttonTint="@color/colorBackround"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <RadioButton
+                        android:checked="true"
                         android:layout_marginLeft="20dp"
                         android:id="@+id/radFemale"
                         android:paddingTop="20dp"
@@ -107,7 +108,7 @@
                         android:paddingBottom="20dp"
                         style="?android:attr/textAppearanceLarge"
                         android:textColor="@color/colorBackround"
-                        android:text="Female"
+                        android:text="@string/female"
                         android:buttonTint="@color/colorBackround"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -128,7 +129,7 @@
                 android:id="@+id/btnRegisterRe"
                 style="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorBackround"
-                android:text="Register"
+                android:text="@string/register"
                 android:background="@drawable/background_login"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -140,7 +141,7 @@
                 android:id="@+id/btnBackRe"
                 style="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Back"
+                android:text="@string/back"
                 android:background="@drawable/background_register"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -153,7 +154,7 @@
                 android:id="@+id/loading_Register"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                style="@style/SpinKitView.PulseRing"
+                style="@style/SpinKitView.ThreeBounce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"

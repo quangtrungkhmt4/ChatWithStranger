@@ -31,7 +31,7 @@
             <EditText
                 android:id="@+id/edtUsername"
                 android:layout_marginTop="50dp"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:drawableLeft="@drawable/ic_person_white_30dp"
                 android:drawablePadding="20dp"
                 android:paddingBottom="10dp"
@@ -41,13 +41,13 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/background_edittext"
-                android:hint="Username"
+                android:hint="@string/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <EditText
                 android:id="@+id/edtPassword"
                 android:layout_marginTop="20dp"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:drawableLeft="@drawable/ic_lock_white_30dp"
                 android:drawablePadding="20dp"
                 android:paddingBottom="10dp"
@@ -57,19 +57,33 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/background_edittext"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:checked="false"
+                android:id="@+id/checkBoxRememberPass"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp"
+                android:paddingLeft="5dp"
+                android:text="@string/remember_pass"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorBackround"
+                android:buttonTint="@color/colorBackround"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
                 <Button
                     android:id="@+id/btnLogin"
                     style="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorBackround"
-                    android:text="Login"
+                    android:text="@string/login"
                     android:background="@drawable/background_login"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="50dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -77,7 +91,7 @@
                     android:id="@+id/btnRegister"
                     style="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorPrimaryDark"
-                    android:text="Register"
+                    android:text="@string/register"
                     android:background="@drawable/background_register"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
@@ -90,7 +104,7 @@
                 android:id="@+id/loading_login"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                style="@style/SpinKitView.PulseRing"
+                style="@style/SpinKitView.ThreeBounce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
