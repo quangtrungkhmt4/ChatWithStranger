@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_marginTop="30dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_splash"
+                android:layout_width="130dp"
+                android:layout_height="130dp" />
+
+            <!--<com.example.quang.chatwithstranger.views.CustomTextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_marginTop="-20dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--style="?android:attr/textAppearanceLarge"-->
+                <!--android:text="Chat with Stranger"-->
+                <!--android:textColor="@color/colorBackround"-->
+                <!--android:layout_height="wrap_content" />-->
+            <EditText
+                android:id="@+id/edtUsername"
+                android:layout_marginTop="50dp"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_person_white_30dp"
+                android:drawablePadding="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/background_edittext"
+                android:hint="Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/edtPassword"
+                android:layout_marginTop="20dp"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_lock_white_30dp"
+                android:drawablePadding="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/background_edittext"
+                android:hint="Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnLogin"
+                    style="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorBackround"
+                    android:text="Login"
+                    android:background="@drawable/background_login"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnRegister"
+                    style="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="Register"
+                    android:background="@drawable/background_register"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/loading_login"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                style="@style/SpinKitView.PulseRing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                app:SpinKit_Color="@color/colorBackround" />
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

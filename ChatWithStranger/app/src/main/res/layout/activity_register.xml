@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/colorPrimary"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_marginTop="30dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_splash"
+                android:layout_width="130dp"
+                android:layout_height="130dp" />
+
+            <EditText
+                android:id="@+id/edtFullNameRe"
+                android:layout_marginTop="50dp"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_info_white_30dp"
+                android:drawablePadding="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/background_edittext"
+                android:hint="Full name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/edtUsernameRe"
+                android:layout_marginTop="30dp"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_person_white_30dp"
+                android:drawablePadding="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/background_edittext"
+                android:hint="Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/edtPasswordRe"
+                android:layout_marginTop="30dp"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_lock_white_30dp"
+                android:drawablePadding="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/background_edittext"
+                android:hint="Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.example.quang.chatwithstranger.views.CustomTextView
+                    android:textColor="@color/colorBackround"
+                    android:text="Gender: "
+                    android:padding="20dp"
+                    style="?android:attr/textAppearanceLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RadioGroup
+                    android:orientation="horizontal"
+                    android:id="@+id/groupSex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/radMale"
+                        android:paddingTop="20dp"
+                        android:paddingLeft="10dp"
+                        android:paddingBottom="20dp"
+                        style="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/colorBackround"
+                        android:text="Male"
+                        android:buttonTint="@color/colorBackround"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/radFemale"
+                        android:paddingTop="20dp"
+                        android:paddingLeft="10dp"
+                        android:paddingBottom="20dp"
+                        style="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/colorBackround"
+                        android:text="Female"
+                        android:buttonTint="@color/colorBackround"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnChooseImageRe"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_add_a_photo_white_100dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+
+            <Button
+                android:id="@+id/btnRegisterRe"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorBackround"
+                android:text="Register"
+                android:background="@drawable/background_login"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnBackRe"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Back"
+                android:background="@drawable/background_register"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/loading_Register"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                style="@style/SpinKitView.PulseRing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                app:SpinKit_Color="@color/colorBackround" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
