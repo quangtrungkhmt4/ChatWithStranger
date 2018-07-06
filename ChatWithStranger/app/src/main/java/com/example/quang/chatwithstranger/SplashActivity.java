@@ -19,13 +19,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        checkInternet();
+
         if (!Utils.checkPermission(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             startActivity(new Intent(this,PermissionActivity.class));
             finish();
             return;
         }
 
-        checkInternet();
     }
 
     private void checkInternet()
@@ -96,7 +97,7 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
                 startActivity(intent);
                 // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
-                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 finish();
             }
         }.start();

@@ -30,14 +30,14 @@ import java.net.URISyntaxException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    Socket mSocket;
+//    Socket mSocket;
     Emitter.Listener onResultLogin;{
 
-        try {
-            mSocket = IO.socket(Constants.PORT);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            mSocket = IO.socket(Constants.PORT);
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
 
         onResultLogin = new Emitter.Listener() {
             @Override
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initSockets() {
-        Singleton.Instance().setmSocket(mSocket);
+        //Singleton.Instance().setmSocket(mSocket);
         Singleton.Instance().getmSocket().connect();
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_LOGIN,onResultLogin);
     }
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
                         // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
-                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         finish();
 
                     } catch (JSONException e) {
@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
                 // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
-                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 break;
         }
     }

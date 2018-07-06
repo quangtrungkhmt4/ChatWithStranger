@@ -17,11 +17,10 @@ var con = mysql.createConnection({
 
 io.sockets.on('connection', function (socket) {
 	
-  console.log("NOTICE: NEW USER CONNECTED!");
+  console.log("NOTICE: NEW USER CONNECTED! "+socket.id);
 
     socket.on('CLIENT_SEND_USER_PASS_LOGIN', function(data){
     //socket.un = data;
-    console.log(socket.un);
   	checkUserAndPass(data,socket);
   });
 
@@ -33,6 +32,11 @@ io.sockets.on('connection', function (socket) {
     socket.on('CLIENT_SEND_AVATAR', function(data){
     //socket.un = data;
   	upImageToServer(data,socket);
+  });
+
+    socket.on('CLIENT_SEND_REQUEST_REGISTER', function(data){
+    //socket.un = data;
+  	registerUser(data,socket);
   });
 
   
@@ -75,11 +79,36 @@ function getMilis()
 }
 
 function upImageToServer(arrByte, socket){
-  var url = getFileNameImage(socket.id);
-  fs.writeFile(url, arrByte, function(err) {
-    if(err) {
-        return console.log(err);
-    }
-    socket.emit('SERVER_SEND_RESULT_AVATAR',"/"+url);
+
+	if (arrByte == null) {
+		socket.emit('SERVER_SEND_RESULT_AVATAR',"null");
+		console.log(arrByte);
+	}else{
+		var url = getFileNameImage(socket.id);
+	  	fs.writeFile(url, arrByte, function(err) {
+	    if(err) {
+	        return console.log(err);
+	    }
+	    socket.emit('SERVER_SEND_RESULT_AVATAR',"/"+url);
+	    console.log(url);
+	  });
+	}
+}
+
+function registerUser(data,socket){
+	var arr = data.split("-");
+	con.query("INSERT INTO `tblusers` VALUES (null,'"+arr[0]+"','"+arr[1]+"','','"+arr[2]+"','',"+arr[3]+",0,'"+arr[4]+"','"+arr[5]+"')", function (err, result, fields) {
+    if (err){
+    	socket.emit('SERVER_SEND_RESULT_REGISTER',"false");
+    	console.log("false");
+    }else{
+    	socket.emit('SERVER_SEND_RESULT_REGISTER',"true");
+    	console.log("true");
+    }	
   });
+
+ 	// con.query(data, function (err, result, fields) {
+  //   if (err) throw err;
+  //   	socket.emit('SERVER_SEND_RESULT_REGISTER',result);
+  // });
 }

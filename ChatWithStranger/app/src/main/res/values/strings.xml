@@ -16,4 +16,5 @@
     <string name="exit">Thoát</string>
     <string name="insert_info">Bạn cần nhập đủ thông tin!</string>
     <string name="exists_user">Tên tài khoản của bạn đã được sử dụng.</string>
+    <string name="register_fail">Đăng ký thất bại.</string>
 </resources>

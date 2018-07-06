@@ -1,5 +1,6 @@
 package com.example.quang.chatwithstranger;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +22,17 @@ import android.widget.Toast;
 import com.example.quang.chatwithstranger.consts.Constants;
 import com.example.quang.chatwithstranger.singleton.Singleton;
 import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.github.ybq.android.spinkit.SpinKitView;
 
 import org.json.JSONArray;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URISyntaxException;
+import java.util.Calendar;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     Emitter.Listener onResultUserExists;
     Emitter.Listener onResultImage;
@@ -66,6 +72,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Button btnBack;
     private SpinKitView loading;
 
+    private int gender;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,14 +100,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void initSockets() {
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_CHECK_EXISTS,onResultUserExists);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_AVATAR,onResultImage);
+        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_REGISTER,onResultRegister);
     }
 
     private void initViews() {
         loading.setVisibility(View.INVISIBLE);
+        //imPhoto.setImageResource(R.drawable.ic_add_a_photo_white_100dp);
+
+        gender = 0;
 
         btnBack.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         imPhoto.setOnClickListener(this);
+        groupGender.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -114,15 +127,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
                 break;
             case R.id.btnRegisterRe:
+                loading.setVisibility(View.VISIBLE);
                 String name = edtName.getText().toString();
                 String user = edtUsername.getText().toString();
                 String pass = edtPassword.getText().toString();
-                int gender;
-                if (radMale.isChecked()){
-                    gender = 1;
-                }else {
-                    gender = 0;
-                }
+
                 if (name.isEmpty() || user.isEmpty() || pass.isEmpty()){
                     Snackbar snackbar = Snackbar
                             .make(edtUsername, R.string.insert_info, Snackbar.LENGTH_SHORT);
@@ -134,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
 
                 Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_USER_CHECK_EXISTS,user);
+                Log.e("--------","checkExists");
                 break;
         }
     }
@@ -153,8 +163,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     public byte[] ImageView_To_Byte(ImageView imgv){
 
-        BitmapDrawable drawable = (BitmapDrawable) imgv.getDrawable();
-        Bitmap bmp = drawable.getBitmap();
+        Bitmap bmp = null;
+        try {
+            BitmapDrawable drawable = (BitmapDrawable) imgv.getDrawable();
+            bmp = drawable.getBitmap();
+        }catch (Exception e){
+//            @SuppressLint({"NewApi", "LocalSuppress"}) BitmapDrawable drawable
+//                    = (BitmapDrawable) getDrawable(R.drawable.user_female);
+//            bmp = drawable.getBitmap();
+            return null;
+        }
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -163,12 +181,53 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void resultRegister(Object arg) {
+    private void resultRegister(final Object arg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("--------","checkRegister");
 
+                String result = (String) arg;
+                if (result.equalsIgnoreCase("true")){
+                    Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    // trong anim ta tạo hai file rồi gọi ở đây để tạo animation khi chuyển activity
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
+                }else if (result.equalsIgnoreCase("false")){
+                    Snackbar snackbar = Snackbar
+                            .make(edtPassword, R.string.register_fail, Snackbar.LENGTH_SHORT);
+                    snackbar.setActionTextColor(Color.WHITE);
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(Color.DKGRAY);
+                    snackbar.show();
+                }
+            }
+        });
     }
 
-    private void resultImage(Object arg) {
-        String url = (String) arg;
+    private void resultImage(final Object arg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("--------","checkImage: "+arg);
+                String url = (String) arg;
+                if (gender == 1){
+                    if (url.equals("null"))
+                        url = "/images/avatar/defaultMale.png";
+                }else if (gender == 0){
+                    if (url.equals("null"))
+                        url = "/images/avatar/defaultFemale.png";
+                }
+                String currentTime = Calendar.getInstance().getTime().toString();
+//                String query = "INSERT INTO `tblusers` VALUES (null,'"+edtUsername.getText().toString()
+//                        +"','"+edtPassword.getText().toString()+"','','"+edtName.getText().toString()
+//                        +"','',"+gender+",0,'"+currentTime+"','"+url+"')";
+
+                String data = edtUsername.getText().toString()+"-"+edtPassword.getText().toString()+"-"+edtName.getText().toString()+"-"+String.valueOf(gender)+"-"+currentTime+"-"+url;
+                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_REQUEST_REGISTER,data);
+            }
+        });
 
     }
 
@@ -184,10 +243,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     View snackbarView = snackbar.getView();
                     snackbarView.setBackgroundColor(Color.DKGRAY);
                     snackbar.show();
-                }else {
+                    return;
+                }else if (data.length() == 0){
                     Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_AVATAR,ImageView_To_Byte(imPhoto));
                 }
             }
         });
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        switch (radioGroup.getId()){
+            case R.id.groupSex:
+                if (i == R.id.radMale){
+                    gender = 1;
+                }else if (i == R.id.radFemale){
+                    gender = 0;
+                }
+                break;
+        }
     }
 }

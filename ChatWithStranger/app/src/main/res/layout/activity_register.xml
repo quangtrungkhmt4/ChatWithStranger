@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@color/colorPrimary"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -88,6 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <RadioButton
+                        android:checked="false"
                         android:layout_marginLeft="10dp"
                         android:id="@+id/radMale"
                         android:paddingTop="20dp"
@@ -121,8 +124,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_add_a_photo_white_100dp"
                 android:layout_width="100dp"
+                android:src="@drawable/ic_add_a_photo_white_100dp"
                 android:layout_height="100dp" />
 
             <Button
