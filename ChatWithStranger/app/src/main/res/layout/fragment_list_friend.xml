@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_marginBottom="70dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_height="?android:actionBarSize">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarListFriend"
+            android:layout_width="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:layout_height="match_parent"></android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardShowFriends"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.example.quang.chatwithstranger.views.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/list_friend"
+                            android:padding="3dp"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/colorBackround"
+                            android:layout_height="wrap_content" />
+                        <com.example.quang.chatwithstranger.views.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:text="(10)"
+                            android:padding="3dp"
+                            android:id="@+id/tvCountFriends"
+                            android:textColor="@color/colorBackround"
+                            android:layout_height="wrap_content" />
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_marginRight="5dp"
+                                android:layout_gravity="right"
+                                android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <com.example.quang.chatwithstranger.views.CustomListView
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:dividerHeight="3dp"
+                    android:id="@+id/lvFriends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.example.quang.chatwithstranger.views.CustomListView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/cardShowBlocks"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.example.quang.chatwithstranger.views.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/blocks"
+                            android:padding="3dp"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/colorBackround"
+                            android:layout_height="wrap_content" />
+                        <com.example.quang.chatwithstranger.views.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:text="(10)"
+                            android:padding="3dp"
+                            android:id="@+id/tvCountBlocks"
+                            android:textColor="@color/colorBackround"
+                            android:layout_height="wrap_content" />
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_marginRight="5dp"
+                                android:layout_gravity="right"
+                                android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <com.example.quang.chatwithstranger.views.CustomListView
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:dividerHeight="3dp"
+                    android:id="@+id/lvBlocks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.example.quang.chatwithstranger.views.CustomListView>
+            </LinearLayout>
+        </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:id="@+id/btnRandon"
+            android:src="@drawable/ic_dice"
+            android:scaleType="centerCrop"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+</LinearLayout>

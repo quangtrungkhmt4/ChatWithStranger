@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:padding="20dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/edtOldPass"
+            android:inputType="textPassword"
+            android:drawableLeft="@drawable/ic_lock_white_30dp"
+            android:drawablePadding="20dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/background_edittext"
+            android:hint="@string/old_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/edtNewPass"
+            android:inputType="textPassword"
+            android:drawableLeft="@drawable/ic_lock_white_30dp"
+            android:drawablePadding="20dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/background_edittext"
+            android:hint="@string/new_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.example.quang.chatwithstranger.views.CustomTextView
+                android:textColor="@color/colorBackround"
+                android:text="@string/cancle"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
+                android:layout_weight="1"
+                android:id="@+id/tvCancleNewPass"
+                android:gravity="center"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.example.quang.chatwithstranger.views.CustomTextView
+                android:textColor="@color/colorBackround"
+                android:text="@string/ok"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
+                android:layout_weight="1"
+                android:id="@+id/tvDoneNewPass"
+                android:gravity="center"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

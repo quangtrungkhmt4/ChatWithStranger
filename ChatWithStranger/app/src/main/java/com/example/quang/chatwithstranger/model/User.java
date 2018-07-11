@@ -1,6 +1,8 @@
 package com.example.quang.chatwithstranger.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
     private int id;
     private String user;
     private String pass;
@@ -10,8 +12,9 @@ public class User {
     private int gender;
     private int isActive;
     private String createdAt;
+    private String image;
 
-    public User(int id, String user, String pass, String email, String name, String phone, int gender, int isActive, String createdAt) {
+    public User(int id, String user, String pass, String email, String name, String phone, int gender, int isActive, String createdAt,String image) {
         this.id = id;
         this.user = user;
         this.pass = pass;
@@ -21,6 +24,7 @@ public class User {
         this.gender = gender;
         this.isActive = isActive;
         this.createdAt = createdAt;
+        this.image = image;
     }
 
     public int getId() {
@@ -93,5 +97,13 @@ public class User {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -3,7 +3,7 @@
     <string name="login">ĐĂNG NHẬP</string>
     <string name="register">ĐĂNG KÝ</string>
     <string name="back">QUAY LẠI</string>
-    <string name="gender">Giới tính:</string>
+    <string name="gender">Giới tính</string>
     <string name="male">Nam</string>
     <string name="female">Nữ</string>
     <string name="username">Tên tài khoản</string>
@@ -17,4 +17,25 @@
     <string name="insert_info">Bạn cần nhập đủ thông tin!</string>
     <string name="exists_user">Tên tài khoản của bạn đã được sử dụng.</string>
     <string name="register_fail">Đăng ký thất bại.</string>
+    <string name="profile">Thông tin</string>
+    <string name="list_friend">Bạn bè</string>
+    <string name="chat">Chat</string>
+    <string name="email">Email</string>
+    <string name="phone">Số điện thoại</string>
+    <string name="cancle">Thoát</string>
+    <string name="ok">Ok</string>
+    <string name="change_name_fail">Đổi tên thất bại</string>
+    <string name="new_name">Nhập tên mới...</string>
+    <string name="new_pass">Nhập mật khẩu mới...</string>
+    <string name="old_pass">Nhập mật khẩu cũ...</string>
+    <string name="change_pass_fail">Đổi mật khẩu thất bại.</string>
+    <string name="new_email">Nhập email mới...</string>
+    <string name="new_phone">Nhập số điện thoại mới...</string>
+    <string name="change_email_fail">Đổi email thất bại.</string>
+    <string name="change_phone_fail">Đổi số điện thoại thất bại.</string>
+    <string name="change_gender_fail">Đổi giới tính thất bại.</string>
+    <string name="upimage_fail">Đổi ảnh thất bại.</string>
+    <string name="logout">ĐĂNG XUẤT</string>
+    <string name="friends">Danh sách bạn bè</string>
+    <string name="blocks">Chặn</string>
 </resources>

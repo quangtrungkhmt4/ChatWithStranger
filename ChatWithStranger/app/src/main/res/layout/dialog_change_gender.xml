@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.quang.chatwithstranger.views.CustomTextView
+            android:textColor="@color/colorBackround"
+            android:text="@string/gender"
+            android:padding="20dp"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:orientation="horizontal"
+            android:id="@+id/groupSex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:checked="false"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/radMaleChangerGender"
+                android:paddingTop="20dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="20dp"
+                style="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorBackround"
+                android:text="@string/male"
+                android:buttonTint="@color/colorBackround"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RadioButton
+                android:checked="true"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/radFemaleChangeGender"
+                android:paddingTop="20dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="20dp"
+                style="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorBackround"
+                android:text="@string/female"
+                android:buttonTint="@color/colorBackround"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.quang.chatwithstranger.views.CustomTextView
+            android:textColor="@color/colorBackround"
+            android:text="@string/cancle"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_weight="1"
+            android:id="@+id/tvCancleNewGender"
+            android:gravity="center"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.example.quang.chatwithstranger.views.CustomTextView
+            android:textColor="@color/colorBackround"
+            android:text="@string/ok"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:layout_weight="1"
+            android:id="@+id/tvDoneNewGender"
+            android:gravity="center"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

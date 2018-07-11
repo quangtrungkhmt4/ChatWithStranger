@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.quang.chatwithstranger.consts.Constants;
+import com.example.quang.chatwithstranger.model.Prefs;
 import com.example.quang.chatwithstranger.model.User;
 import com.example.quang.chatwithstranger.singleton.Singleton;
 import com.github.nkzawa.emitter.Emitter;
@@ -125,16 +126,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         int gender = object.getInt("GENDER");
                         int isActive = object.getInt("IS_ACTIVE");
                         String createdAt = object.getString("CREATED_AT");
+                        String image = object.getString("IMAGE");
 
-                        User u = new User(id,user,pass,email,name,phone,gender,isActive,createdAt);
+                        User u = new User(id,user,pass,email,name,phone,gender,isActive,createdAt,image);
 
-                        SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
-
-                        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(u);
-                        prefsEditor.putString(Constants.KEY_USER_LOGIN, json);
-                        prefsEditor.apply();
+                        Prefs prefs = new Prefs(getApplicationContext(),Constants.KEY_USER_LOGIN,u);
+                        prefs.comitUser();
 
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);

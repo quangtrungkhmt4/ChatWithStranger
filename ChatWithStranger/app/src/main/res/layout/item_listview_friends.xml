@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imAvatarItem"
+            android:layout_width="60dp"
+            android:src="@color/colorPrimary"
+            android:layout_height="60dp" />
+        <ImageView
+            android:id="@+id/imIsActiveItem"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/ic_off_20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <com.example.quang.chatwithstranger.views.CustomTextView
+        android:layout_width="wrap_content"
+        android:text="Name"
+        android:id="@+id/tvNameItem"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        style="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorPrimary"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

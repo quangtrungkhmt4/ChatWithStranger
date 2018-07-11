@@ -118,15 +118,15 @@
                 </RadioGroup>
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/btnChooseImageRe"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop"
-                android:layout_width="100dp"
-                android:src="@drawable/ic_add_a_photo_white_100dp"
-                android:layout_height="100dp" />
+            <!--<ImageView-->
+                <!--android:id="@+id/btnChooseImageRe"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:src="@drawable/ic_add_a_photo_white_100dp"-->
+                <!--android:layout_height="100dp" />-->
 
             <Button
                 android:id="@+id/btnRegisterRe"

@@ -34,23 +34,23 @@ import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    Emitter.Listener onResultUserExists;
-    Emitter.Listener onResultImage;
+//    Emitter.Listener onResultUserExists;
+//    Emitter.Listener onResultImage;
     Emitter.Listener onResultRegister;
     {
-        onResultUserExists = new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                resultUserExists(args[0]);
-            }
-        };
-
-        onResultImage = new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                resultImage(args[0]);
-            }
-        };
+//        onResultUserExists = new Emitter.Listener() {
+//            @Override
+//            public void call(Object... args) {
+//                resultUserExists(args[0]);
+//            }
+//        };
+//
+//        onResultImage = new Emitter.Listener() {
+//            @Override
+//            public void call(Object... args) {
+//                resultImage(args[0]);
+//            }
+//        };
 
         onResultRegister = new Emitter.Listener() {
             @Override
@@ -67,7 +67,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private RadioGroup groupGender;
     private RadioButton radMale;
     private RadioButton radFemale;
-    private ImageView imPhoto;
     private Button btnRegister;
     private Button btnBack;
     private SpinKitView loading;
@@ -91,15 +90,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         groupGender = findViewById(R.id.groupSex);
         radMale = findViewById(R.id.radMale);
         radFemale = findViewById(R.id.radFemale);
-        imPhoto = findViewById(R.id.btnChooseImageRe);
         btnRegister = findViewById(R.id.btnRegisterRe);
         btnBack = findViewById(R.id.btnBackRe);
         loading = findViewById(R.id.loading_Register);
     }
 
     private void initSockets() {
-        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_CHECK_EXISTS,onResultUserExists);
-        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_AVATAR,onResultImage);
+//        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_CHECK_EXISTS,onResultUserExists);
+//        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_AVATAR,onResultImage);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_REGISTER,onResultRegister);
     }
 
@@ -111,7 +109,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         btnBack.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
-        imPhoto.setOnClickListener(this);
         groupGender.setOnCheckedChangeListener(this);
     }
 
@@ -125,11 +122,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 finish();
                 break;
-            case R.id.btnChooseImageRe:
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
-                break;
+//            case R.id.btnChooseImageRe:
+//                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+//                break;
             case R.id.btnRegisterRe:
                 loading.setVisibility(View.VISIBLE);
                 String name = edtName.getText().toString();
@@ -149,34 +146,35 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 //                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_USER_CHECK_EXISTS,user);
 //                Log.e("--------","checkExists");
 
-
-
+                String url = "";
+                if (gender == 1){
+                    url = "/images/avatar/defaultMale.png";
+                }else if (gender == 0){
+                    url = "/images/avatar/defaultFemale.png";
+                }
                 String currentTime = Calendar.getInstance().getTime().toString();
 //                String query = "INSERT INTO `tblusers` VALUES (null,'"+edtUsername.getText().toString()
 //                        +"','"+edtPassword.getText().toString()+"','','"+edtName.getText().toString()
 //                        +"','',"+gender+",0,'"+currentTime+"','"+url+"')";
 
-                String data1 = edtUsername.getText().toString()+"-"+edtPassword.getText().toString()+"-"+edtName.getText().toString()+"-"+String.valueOf(gender)+"-"+currentTime;
-                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_REQUEST_REGISTER,data1);
-
-
-
+                String data = edtUsername.getText().toString()+"-"+edtPassword.getText().toString()+"-"+edtName.getText().toString()+"-"+String.valueOf(gender)+"-"+currentTime+"-"+url;
+                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_REQUEST_REGISTER,data);
                 break;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    imPhoto.setImageURI(selectedImage);
-                }
-                break;
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        switch(requestCode) {
+//            case 1:
+//                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = data.getData();
+//                    imPhoto.setImageURI(selectedImage);
+//                }
+//                break;
+//        }
+//    }
 
     public byte[] ImageView_To_Byte(ImageView imgv){
 
@@ -208,61 +206,62 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     finish();
                 }else if (result.equalsIgnoreCase("false")){
                     Snackbar snackbar = Snackbar
-                            .make(edtPassword, R.string.register_fail, Snackbar.LENGTH_SHORT);
-                    snackbar.setActionTextColor(Color.WHITE);
-                    View snackbarView = snackbar.getView();
-                    snackbarView.setBackgroundColor(Color.DKGRAY);
-                    snackbar.show();
-                }
-            }
-        });
-    }
-
-    private void resultImage(final Object arg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.e("--------","checkImage: "+arg);
-                String url = (String) arg;
-                if (gender == 1){
-                    if (url.equalsIgnoreCase("null"))
-                        url = "/images/avatar/defaultMale.png";
-                }else if (gender == 0){
-                    if (url.equalsIgnoreCase("null"))
-                        url = "/images/avatar/defaultFemale.png";
-                }
-                String currentTime = Calendar.getInstance().getTime().toString();
-//                String query = "INSERT INTO `tblusers` VALUES (null,'"+edtUsername.getText().toString()
-//                        +"','"+edtPassword.getText().toString()+"','','"+edtName.getText().toString()
-//                        +"','',"+gender+",0,'"+currentTime+"','"+url+"')";
-
-                String data = edtUsername.getText().toString()+"-"+edtPassword.getText().toString()+"-"+edtName.getText().toString()+"-"+String.valueOf(gender)+"-"+currentTime+"-"+url;
-                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_REQUEST_REGISTER,data);
-            }
-        });
-
-    }
-
-    private void resultUserExists(final Object arg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                JSONArray data = (JSONArray) arg;
-                if (data.length() != 0) {
-                    Snackbar snackbar = Snackbar
                             .make(edtPassword, R.string.exists_user, Snackbar.LENGTH_SHORT);
                     snackbar.setActionTextColor(Color.WHITE);
                     View snackbarView = snackbar.getView();
                     snackbarView.setBackgroundColor(Color.DKGRAY);
                     snackbar.show();
-                    return;
-                }else if (data.length() == 0){
-                    Log.e("++++++++","push");
-                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_AVATAR,ImageView_To_Byte(imPhoto));
+                    loading.setVisibility(View.INVISIBLE);
                 }
             }
         });
     }
+
+//    private void resultImage(final Object arg) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.e("--------","checkImage: "+arg);
+//                String url = (String) arg;
+//                if (gender == 1){
+//                    if (url.equalsIgnoreCase("null"))
+//                        url = "/images/avatar/defaultMale.png";
+//                }else if (gender == 0){
+//                    if (url.equalsIgnoreCase("null"))
+//                        url = "/images/avatar/defaultFemale.png";
+//                }
+//                String currentTime = Calendar.getInstance().getTime().toString();
+////                String query = "INSERT INTO `tblusers` VALUES (null,'"+edtUsername.getText().toString()
+////                        +"','"+edtPassword.getText().toString()+"','','"+edtName.getText().toString()
+////                        +"','',"+gender+",0,'"+currentTime+"','"+url+"')";
+//
+//                String data = edtUsername.getText().toString()+"-"+edtPassword.getText().toString()+"-"+edtName.getText().toString()+"-"+String.valueOf(gender)+"-"+currentTime+"-"+url;
+//                Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_REQUEST_REGISTER,data);
+//            }
+//        });
+//
+//    }
+//
+//    private void resultUserExists(final Object arg) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                JSONArray data = (JSONArray) arg;
+//                if (data.length() != 0) {
+//                    Snackbar snackbar = Snackbar
+//                            .make(edtPassword, R.string.exists_user, Snackbar.LENGTH_SHORT);
+//                    snackbar.setActionTextColor(Color.WHITE);
+//                    View snackbarView = snackbar.getView();
+//                    snackbarView.setBackgroundColor(Color.DKGRAY);
+//                    snackbar.show();
+//                    return;
+//                }else if (data.length() == 0){
+//                    Log.e("++++++++","push");
+//                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_SEND_AVATAR,ImageView_To_Byte(imPhoto));
+//                }
+//            }
+//        });
+//    }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {

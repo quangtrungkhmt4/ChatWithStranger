@@ -19,13 +19,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        checkInternet();
 
         if (!Utils.checkPermission(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             startActivity(new Intent(this,PermissionActivity.class));
             finish();
             return;
         }
+
+        checkInternet();
 
     }
 
