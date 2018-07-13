@@ -80,6 +80,22 @@ io.sockets.on('connection', function (socket) {
     getBlocks(data,socket);
   });
 
+    socket.on('CLIENT_CREATE_CONVERSATION', function(data){
+    //socket.un = data;
+    console.log("CLIENT_CREATE_CONVERSATION" + data);
+    createConversation(data,socket);
+  });
+
+    socket.on('CLIENT_GET_CONVERSATIONS', function(data){
+    //socket.un = data;
+    getConversations(data,socket);
+  });
+
+    socket.on('CLIENT_GET_MESSAGES', function(data){
+    //socket.un = data;
+    getMessages(data,socket);
+  });
+
 
   
 });
@@ -325,3 +341,80 @@ function getBlocks(data,socket){
 
   });
 }
+
+function createConversation(data,socket){
+
+    con.query("SELECT tblconversation.IDCONVERSATION, tblconversation.TITLE, tblconversation.CREATED_AT, tblconversation.IDUSER AS 'USER', tblparticipants.IDUSER AS 'GUEST' FROM tblconversation INNER JOIN tblparticipants ON tblconversation.IDCONVERSATION = tblparticipants.IDCONVERSATION WHERE (tblconversation.IDUSER = "+data.idUser+" OR tblparticipants.IDUSER = "+data.idUser+") AND (tblconversation.IDUSER = "+data.idGuest+" OR tblparticipants.IDUSER = "+data.idGuest+") GROUP BY tblconversation.IDCONVERSATION", function (err, result, fields) {
+    if (err) throw err;
+    if (result.length != 0) {
+      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',result);
+      console.log(result);
+    }
+    else{
+
+
+        con.query("INSERT INTO `tblconversation` VALUES (null,'"+data.title+"','"+data.time+"',"+data.idUser+ ")", function (err, result, fields) {
+        if (err){
+          socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
+        }else{
+            con.query("SELECT `IDCONVERSATION` FROM `tblconversation` WHERE `TITLE` = '"+data.title+"'", function (err, result, fields) {
+            var idConversation = result[0].IDCONVERSATION;
+            if (err){
+              socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
+            }else{
+                con.query("INSERT INTO `tblparticipants` VALUES (null,"+idConversation+","+data.idGuest+")", function (err, result, fields) {
+                if (err){
+                  socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
+                }else{
+                    con.query("SELECT tblconversation.IDCONVERSATION, tblconversation.TITLE, tblconversation.CREATED_AT, tblconversation.IDUSER AS 'USER', tblparticipants.IDUSER AS 'GUEST' FROM tblconversation INNER JOIN tblparticipants ON tblconversation.IDCONVERSATION = tblparticipants.IDCONVERSATION WHERE (tblconversation.IDUSER = "+data.idUser+" OR tblparticipants.IDUSER = "+data.idUser+") AND (tblconversation.IDUSER = "+data.idGuest+" OR tblparticipants.IDUSER = "+data.idGuest+") GROUP BY tblconversation.IDCONVERSATION", function (err, result, fields) {
+                    if (err){
+                      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
+                    }else{
+                      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',result);
+                      console.log("create conversation success!");
+                      console.log(result);
+                    }
+                  });
+                }
+              });
+            }   
+          });
+        }  
+
+      });
+
+
+    }
+  });
+
+}
+
+function getConversations(data,socket){
+    con.query("SELECT tblconversation.IDCONVERSATION, tblconversation.TITLE"
+      +", tblconversation.CREATED_AT, tblconversation.IDUSER AS 'USER'"
+      +", tblparticipants.IDUSER AS 'GUEST' FROM tblconversation "
+      +"INNER JOIN tblparticipants ON tblconversation.IDCONVERSATION "
+      +"= tblparticipants.IDCONVERSATION WHERE tblconversation.IDUSER = "+data+" "
+      +"OR tblparticipants.IDUSER = "+data+" GROUP BY tblconversation.IDCONVERSATION", function (err, result, fields) {
+    if (err){
+      socket.emit('SERVER_SEND_RESULT_CONVERSATIONS',"false");
+    }else{
+      socket.emit('SERVER_SEND_RESULT_CONVERSATIONS',result);
+      console.log(result);
+    }   
+  });
+}
+
+function getMessages(data,socket){
+      con.query("SELECT * FROM tblmessages WHERE tblmessages.IDCONVERSATION = "+data, function (err, result, fields) {
+    if (err){
+      socket.emit('SERVER_SEND_RESULT_MESSAGES',"false");
+    }else{
+      socket.emit('SERVER_SEND_RESULT_MESSAGES',result);
+      console.log(result);
+    }   
+  });
+}
+
+
+

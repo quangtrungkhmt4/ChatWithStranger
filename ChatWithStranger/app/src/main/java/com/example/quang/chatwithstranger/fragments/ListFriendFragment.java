@@ -1,5 +1,8 @@
 package com.example.quang.chatwithstranger.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,24 +11,25 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.quang.chatwithstranger.MainActivity;
+import com.example.quang.chatwithstranger.MessageActivity;
 import com.example.quang.chatwithstranger.R;
 import com.example.quang.chatwithstranger.adapter.ListFriendsAdapter;
 import com.example.quang.chatwithstranger.consts.Constants;
+import com.example.quang.chatwithstranger.model.Conversation;
+import com.example.quang.chatwithstranger.model.JsonConversation;
 import com.example.quang.chatwithstranger.model.Prefs;
 import com.example.quang.chatwithstranger.model.User;
 import com.example.quang.chatwithstranger.singleton.Singleton;
 import com.example.quang.chatwithstranger.views.CustomListView;
 import com.github.nkzawa.emitter.Emitter;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,11 +37,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
-public class ListFriendFragment extends Fragment implements View.OnClickListener {
+public class ListFriendFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     Emitter.Listener onResultFriends;
     Emitter.Listener onResultBlocks;
+    Emitter.Listener onResultCreateConversation;
     {
         onResultFriends = new Emitter.Listener() {
             @Override
@@ -52,10 +58,64 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
                 resultBlocks(args[0]);
             }
         };
+
+        onResultCreateConversation = new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                resultCreateConversation(args[0]);
+            }
+        };
+    }
+
+    private void resultCreateConversation(final Object arg) {
+        Log.e("result-----------","result");
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("result-----------","result1");
+                JSONArray data = (JSONArray) arg;
+                if(data.length() == 1){
+                    try {
+                        JSONObject object = data.getJSONObject(0);
+                        int id = object.getInt("IDCONVERSATION");
+                        String title = object.getString("TITLE");
+                        String created_at = object.getString("CREATED_AT");
+                        int u = object.getInt("USER");
+                        int guest = object.getInt("GUEST");
+
+                        conversation = new Conversation(id,title,created_at,u,guest);
+//                        mainActivity.switchMessActivity(conversation);
+                        checkSwitch = true;
+                        Log.e("result-----------","result2");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        Log.e("result-----------","result3");
+    }
+
+    private class SwitchMess extends AsyncTask<Conversation,Void,Conversation>{
+
+        @Override
+        protected Conversation doInBackground(Conversation... conversations) {
+            return conversations[0];
+        }
+
+        @Override
+        protected void onPostExecute(Conversation conversation) {
+            super.onPostExecute(conversation);
+            Intent intent = new Intent(mainActivity,MessageActivity.class);
+            intent.putExtra("conversation",conversation);
+            mainActivity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            startActivity(intent);
+        }
     }
 
     private void resultBlocks(final Object arg) {
         mainActivity.runOnUiThread(new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 arrBlocks.clear();
@@ -89,6 +149,7 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
 
     private void resultFriends(final Object arg) {
         mainActivity.runOnUiThread(new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 arrFriend.clear();
@@ -139,8 +200,12 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
     private boolean checkOpenBlocks;
     private User user;
 
-    private Thread thread;
     private boolean isRunning;
+
+    private Conversation conversation;
+
+    private boolean checkSwitch = false;
+    private boolean checkClick = false;
 
     @Nullable
     @Override
@@ -158,8 +223,9 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         initViews();
     }
 
+    @SuppressLint("NewApi")
     private void findID() {
-        toolbar = getActivity().findViewById(R.id.toolbarListFriend);
+        toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbarListFriend);
         cardShowFriends = getActivity().findViewById(R.id.cardShowFriends);
         cardShowBlocks = getActivity().findViewById(R.id.cardShowBlocks);
         lvFriends = getActivity().findViewById(R.id.lvFriends);
@@ -191,11 +257,13 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
     private void initSockets() {
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_FRIENDS,onResultFriends);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_BLOCKS,onResultBlocks);
+        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_CREATE_CONVERSATION,onResultCreateConversation);
     }
 
+    @SuppressLint("NewApi")
     private void initViews() {
         mainActivity.setSupportActionBar(toolbar);
-        mainActivity.getSupportActionBar().setTitle(R.string.friends);
+        Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle(R.string.friends);
 
         checkOpenFriends = true;
         checkOpenBlocks = false;
@@ -204,12 +272,19 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         cardShowBlocks.setOnClickListener(this);
 
         isRunning = true;
-        thread = new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (isRunning){
-                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_GET_FRIENDS,user.getId());
-                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_GET_BLOCKS,user.getId());
+                while (isRunning) {
+                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_GET_FRIENDS, user.getId());
+                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_GET_BLOCKS, user.getId());
+
+                    if (checkSwitch){
+                        SwitchMess switchMess = new SwitchMess();
+                        switchMess.execute(conversation);
+                        checkSwitch = false;
+                        Log.e("switch-----------","switch");
+                    }
 
                     try {
                         Thread.sleep(5000);
@@ -220,6 +295,8 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
             }
         });
         thread.start();
+
+        lvFriends.setOnItemClickListener(this);
     }
 
     @Override
@@ -251,5 +328,34 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         super.onDestroy();
 
         isRunning = false;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getId()){
+            case R.id.lvFriends:
+                if (!checkClick){
+                    JsonConversation jsonConversation = new JsonConversation(arrFriend.get(i).getName()+","+user.getName()
+                            ,user.getId(),arrFriend.get(i).getId(),Calendar.getInstance().getTime().toString());
+                    Gson gson = new Gson();
+                    try {
+                        JSONObject obj = new JSONObject(gson.toJson(jsonConversation));
+                        Singleton.Instance().getmSocket().emit(Constants.CLIENT_CREATE_CONVERSATION,obj);
+                        Log.e("click-----------","click");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    checkClick = true;
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("resume-----------","resume");
+        checkClick = false;
     }
 }

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,7 +18,10 @@ import com.example.quang.chatwithstranger.consts.Constants;
 import com.example.quang.chatwithstranger.fragments.ChatFragment;
 import com.example.quang.chatwithstranger.fragments.ListFriendFragment;
 import com.example.quang.chatwithstranger.fragments.ProfileFragment;
+import com.example.quang.chatwithstranger.model.Conversation;
+import com.example.quang.chatwithstranger.model.JsonConversation;
 import com.example.quang.chatwithstranger.model.Prefs;
+import com.example.quang.chatwithstranger.model.User;
 import com.example.quang.chatwithstranger.singleton.Singleton;
 import com.github.nkzawa.emitter.Emitter;
 
@@ -131,5 +135,12 @@ public class MainActivity extends AppCompatActivity {
 
     public Context getAppContext(){
         return getApplicationContext();
+    }
+
+    public void switchMessActivity(Conversation conversation){
+        Intent intent = new Intent(this,MessageActivity.class);
+        intent.putExtra("conversation",conversation);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        startActivity(intent);
     }
 }

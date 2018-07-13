@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_mode_edit_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_people_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,7 +33,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_action_edit_white" />
+                                      <entry key="outputName" value="ic_action_group" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="dad2c7" />
                                     </map>
@@ -71,7 +71,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_brightness_1_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_photo_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -81,12 +81,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="b3b3b3" />
-                            <entry key="height" value="20" />
-                            <entry key="outputName" value="ic_off_20dp" />
+                            <entry key="color" value="dad2c7" />
+                            <entry key="outputName" value="ic_photo_white_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\quang\Downloads\dice (1).svg" />
-                            <entry key="width" value="20" />
                           </map>
                         </option>
                       </PersistentState>
