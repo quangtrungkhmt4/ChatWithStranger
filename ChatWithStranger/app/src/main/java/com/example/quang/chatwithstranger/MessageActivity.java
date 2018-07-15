@@ -39,7 +39,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
+public class MessageActivity extends AppCompatActivity implements View.OnClickListener, ListMessAdapter.ClickListener {
 
     Emitter.Listener onResultMessages;
     Emitter.Listener onResultUpdateMess;
@@ -84,9 +84,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                 e.printStackTrace();
                             }
                         }
-                        messAdapter = new ListMessAdapter(MessageActivity.this, arrMess,user.getId());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
-                        recyclerView.setAdapter(messAdapter);
+//                        messAdapter = new ListMessAdapter(MessageActivity.this, arrMess,user.getId());
+//                        recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
+//                        recyclerView.setAdapter(messAdapter);
+                        messAdapter.notifyDataSetChanged();
                         recyclerView.scrollToPosition(arrMess.size() - 1);
                     }
                 } catch (JSONException e) {
@@ -228,6 +229,11 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         btnPhoto.setOnClickListener(this);
         btnEmotion.setOnClickListener(this);
 
+        messAdapter = new ListMessAdapter(MessageActivity.this, arrMess,user.getId());
+        recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
+        recyclerView.setAdapter(messAdapter);
+        messAdapter.setOnItemClickListener(this);
+
 
 //        emotionAdapter = new ListEmotionAdapter(this,R.layout.item_emotion,arrEmotion);
 //        gvEmotion.setAdapter(emotionAdapter);
@@ -276,7 +282,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 if(arrMess.size() == 0)
                     lastIndex = 0;
                 else
-                    arrMess.get(arrMess.size() - 1).getId();
+                    lastIndex = arrMess.get(arrMess.size() - 1).getId();
                 JsonTextMessage mess = new JsonTextMessage(idConversation,user.getId(),text
                         , Calendar.getInstance().getTime().toString(),lastIndex);
                 Gson gson = new Gson();
@@ -323,7 +329,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                         if(arrMess.size() == 0)
                             lastIndex = 0;
                         else
-                            arrMess.get(arrMess.size() - 1).getId();
+                            lastIndex = arrMess.get(arrMess.size() - 1).getId();
                         JsonPhotoMessage photoMessage = new JsonPhotoMessage(idConversation,user.getId()
                             ,bytes,Calendar.getInstance().getTime().toString(),lastIndex);
                         Gson gson = new Gson();
@@ -366,6 +372,16 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(int position, View v) {
+        Toast.makeText(this, arrMess.get(position).getText()+"", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongClick(int position, View v) {
+
     }
 
 

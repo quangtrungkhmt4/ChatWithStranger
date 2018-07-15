@@ -25,7 +25,7 @@ public class ListMessAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<Message> mMessageList;
     private int currentUser;
-    private ItemClickListener mClickListener;
+    private static ClickListener clickListener;
 
     public ListMessAdapter(Context context, List<Message> messageList, int currentUser) {
         mContext = context;
@@ -115,8 +115,8 @@ public class ListMessAdapter extends RecyclerView.Adapter {
         }
 
         @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
 
@@ -152,16 +152,18 @@ public class ListMessAdapter extends RecyclerView.Adapter {
         }
 
         @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
 
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
+    public void setOnItemClickListener(ClickListener clickListener) {
+        ListMessAdapter.clickListener = clickListener;
     }
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
     }
 }
