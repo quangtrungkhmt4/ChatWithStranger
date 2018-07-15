@@ -6,21 +6,17 @@ public class Message {
     private int idUser;
     private String text;
     private String photo;
-    private String video;
-    private String gif;
-    private String emotion;
     private String time;
+    private String avatar;
 
-    public Message(int id, int idConersation, int idUser, String text, String photo, String video, String gif, String emotion, String time) {
+    public Message(int id, int idConersation, int idUser, String text, String photo, String time, String avatar) {
         this.id = id;
         this.idConersation = idConersation;
         this.idUser = idUser;
         this.text = text;
         this.photo = photo;
-        this.video = video;
-        this.gif = gif;
-        this.emotion = emotion;
         this.time = time;
+        this.avatar = avatar;
     }
 
     public int getId() {
@@ -63,35 +59,19 @@ public class Message {
         this.photo = photo;
     }
 
-    public String getVideo() {
-        return video;
-    }
-
-    public void setVideo(String video) {
-        this.video = video;
-    }
-
-    public String getGif() {
-        return gif;
-    }
-
-    public void setGif(String gif) {
-        this.gif = gif;
-    }
-
-    public String getEmotion() {
-        return emotion;
-    }
-
-    public void setEmotion(String emotion) {
-        this.emotion = emotion;
-    }
-
     public String getTime() {
         return time;
     }
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

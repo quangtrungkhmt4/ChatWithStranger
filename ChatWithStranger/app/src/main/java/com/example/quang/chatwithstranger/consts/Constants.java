@@ -4,7 +4,7 @@ public interface Constants {
 
     public static final String KEY_USER_LOGIN = "KEY_USER_LOGIN";
 
-    public static final String PORT = "http://192.168.100.98:3000";
+    public static final String PORT = "http://192.168.108.101:3000";
     public static final String SERVER_SEND_RESULT_LOGIN = "SERVER_SEND_RESULT_LOGIN";
     public static final String CLIENT_SEND_USER_PASS_LOGIN = "CLIENT_SEND_USER_PASS_LOGIN";
     public static final String CLIENT_SEND_USER_CHECK_EXISTS = "CLIENT_SEND_USER_CHECK_EXISTS";
@@ -48,4 +48,17 @@ public interface Constants {
 
     public static final String CLIENT_GET_MESSAGES = "CLIENT_GET_MESSAGES";
     public static final String SERVER_SEND_RESULT_MESSAGES = "SERVER_SEND_RESULT_MESSAGES";
+
+    public static final String CLIENT_GET_AVATAR_GUEST = "CLIENT_GET_AVATAR_GUEST";
+    public static final String SERVER_SEND_RESULT_AVATAR_GUEST = "SERVER_SEND_RESULT_AVATAR_GUEST";
+
+    public static final String CLIENT_SEND_TEXT_MESSAGE = "CLIENT_SEND_TEXT_MESSAGE";
+
+    public static final String CLIENT_SEND_PHOTO_MESSAGE = "CLIENT_SEND_PHOTO_MESSAGE";
+    public static final String CLIENT_SEND_EMOTION_MESSAGE = "CLIENT_SEND_EMOTION_MESSAGE";
+
+    public static final String SERVER_SEND_STATE_ON_OFF = "SERVER_SEND_STATE_ON_OFF";
+
+    public static final String SERVER_SEND_UPDATE_MESSAGES = "SERVER_SEND_UPDATE_MESSAGES";
+
 }

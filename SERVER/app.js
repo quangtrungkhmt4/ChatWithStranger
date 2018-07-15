@@ -96,6 +96,21 @@ io.sockets.on('connection', function (socket) {
     getMessages(data,socket);
   });
 
+    socket.on('CLIENT_SEND_TEXT_MESSAGE', function(data){
+    //socket.un = data;
+    sendTextMessage(data,socket);
+  }); 
+
+    socket.on('CLIENT_SEND_PHOTO_MESSAGE', function(data){
+    //socket.un = data;
+    sendPhotoMessage(data,socket);
+  }); 
+
+    socket.on('CLIENT_SEND_EMOTION_MESSAGE', function(data){
+    //socket.un = data;
+    sendEmotionMessage(data,socket);
+  });
+
 
   
 });
@@ -112,6 +127,10 @@ function checkUserAndPass(userPass,socket)
     if (result.length == 1) {
     	con.query("UPDATE `tblusers` SET `IS_ACTIVE` = 1 WHERE `USER` = '"+arr[0]+"'", function (err, result, fields) {
     	if (err) throw err;});
+      con.query("SELECT IDUSER,IS_ACTIVE FROM `tblusers` WHERE `USER` = '"+arr[0]+"'", function (err, result, fields) {
+        if (err) throw err;
+          io.sockets.emit('SERVER_SEND_STATE_ON_OFF',result); 
+      });
     }
   });
 	//console.log(userPass);
@@ -300,8 +319,14 @@ function logout(data,socket){
       socket.emit('SERVER_SEND_RESULT_LOGOUT',"false");
     }else{
       socket.emit('SERVER_SEND_RESULT_LOGOUT',"true");
+        con.query("SELECT IDUSER,IS_ACTIVE FROM `tblusers` WHERE IDUSER = "+data + "", function (err, result, fields) {
+        if (err) throw err;
+          io.sockets.emit('SERVER_SEND_STATE_ON_OFF',result); 
+      });
     }   
   });
+
+  
 }
 
 function getFriends(data,socket){
@@ -405,16 +430,111 @@ function getConversations(data,socket){
   });
 }
 
+// function getMessages(data,socket){
+//       con.query("SELECT tblmessages.IDMESSAGES, tblmessages.IDCONVERSATION"
+//         +", tblmessages.IDUSER, tblmessages.TEXT, tblmessages.PHOTO"
+//         +", tblmessages.CREATED_AT, tblusers.IMAGE FROM `tblmessages` "
+//         +"INNER JOIN tblusers ON tblmessages.IDUSER = tblusers.IDUSER "
+//         +"WHERE tblmessages.IDCONVERSATION = "+data+" ORDER BY tblmessages.IDMESSAGES ASC", function (err, result, fields) {
+//     if (err){
+//       socket.emit('SERVER_SEND_RESULT_MESSAGES',"false");
+//     }else{
+//       socket.emit('SERVER_SEND_RESULT_MESSAGES',{arr: result, idCon: data});
+//       console.log({arr: result, idCon: data});
+//     }   
+//   });
+// }
+
 function getMessages(data,socket){
-      con.query("SELECT * FROM tblmessages WHERE tblmessages.IDCONVERSATION = "+data, function (err, result, fields) {
+    var arr = data.split("-");
+      con.query("SELECT tblconversation.IDCONVERSATION FROM tblconversation INNER JOIN tblparticipants ON tblconversation.IDCONVERSATION = tblparticipants.IDCONVERSATION WHERE (tblconversation.IDUSER = "+arr[0]+" OR tblparticipants.IDUSER = "+arr[0]+") AND (tblconversation.IDUSER = "+arr[1]+" OR tblparticipants.IDUSER = "+arr[1]+") GROUP BY tblconversation.IDCONVERSATION", function (err, result, fields) {
+      if (err) throw err;
+        var id = result[0].IDCONVERSATION;
+        con.query("SELECT tblmessages.IDMESSAGES, tblmessages.IDCONVERSATION"
+        +", tblmessages.IDUSER, tblmessages.TEXT, tblmessages.PHOTO"
+        +", tblmessages.CREATED_AT, tblusers.IMAGE FROM `tblmessages` "
+        +"INNER JOIN tblusers ON tblmessages.IDUSER = tblusers.IDUSER "
+        +"WHERE tblmessages.IDCONVERSATION = "+id+" ORDER BY tblmessages.IDMESSAGES ASC", function (err, result, fields) {
+        if (err){
+          socket.emit('SERVER_SEND_RESULT_MESSAGES',"false");
+        }else{
+          socket.emit('SERVER_SEND_RESULT_MESSAGES',{arr: result, idCon: id});
+          console.log({arr: result, idCon: id});
+        }   
+      }); 
+  });
+}
+
+function sendTextMessage(data,socket){
+    con.query("INSERT INTO `tblmessages` VALUES (null,"+data.idConversation+","+data.idUser+",'"+data.text+"','','','','','"+data.time+"')", function (err, result, fields) {
     if (err){
-      socket.emit('SERVER_SEND_RESULT_MESSAGES',"false");
     }else{
-      socket.emit('SERVER_SEND_RESULT_MESSAGES',result);
-      console.log(result);
+
+          con.query("SELECT tblmessages.IDMESSAGES, tblmessages.IDCONVERSATION"
+          +", tblmessages.IDUSER, tblmessages.TEXT, tblmessages.PHOTO"
+          +", tblmessages.CREATED_AT, tblusers.IMAGE FROM `tblmessages` "
+          +"INNER JOIN tblusers ON tblmessages.IDUSER = tblusers.IDUSER "
+          +"WHERE tblmessages.IDCONVERSATION = "+data.idConversation+" AND tblmessages.IDMESSAGES > "+data.idLastMess+" ORDER BY tblmessages.IDMESSAGES ASC", function (err, result, fields) {
+          if (err){
+            socket.emit('SERVER_SEND_UPDATE_MESSAGES',"false");
+          }else{
+            io.sockets.emit('SERVER_SEND_UPDATE_MESSAGES',{arr: result, idCon: data.idConversation});
+            console.log({arr: result, idCon: data.idConversation});
+          }   
+        }); 
     }   
   });
 }
+
+function sendPhotoMessage(data,socket){
+      var url = getFileNameImage(socket.id);
+      fs.writeFile(url, new Buffer(data.photo), function(err) {
+      if(err) {
+        
+      }else{
+
+          con.query("INSERT INTO `tblmessages` VALUES (null,"+data.idConversation+","+data.idUser+",'','/"+url+"','','','','"+data.time+"')", function (err, result, fields) {
+          if (err){
+
+          }else{
+              con.query("SELECT tblmessages.IDMESSAGES, tblmessages.IDCONVERSATION"
+              +", tblmessages.IDUSER, tblmessages.TEXT, tblmessages.PHOTO"
+              +", tblmessages.CREATED_AT, tblusers.IMAGE FROM `tblmessages` "
+              +"INNER JOIN tblusers ON tblmessages.IDUSER = tblusers.IDUSER "
+              +"WHERE tblmessages.IDCONVERSATION = "+data.idConversation+" AND tblmessages.IDMESSAGES > "+data.idLastMess+" ORDER BY tblmessages.IDMESSAGES ASC", function (err, result, fields) {
+              if (err){
+                socket.emit('SERVER_SEND_UPDATE_MESSAGES',"false");
+              }else{
+                io.sockets.emit('SERVER_SEND_UPDATE_MESSAGES',{arr: result, idCon: data.idConversation});
+                console.log({arr: result, idCon: data.idConversation});
+              }   
+            }); 
+          }   
+        });
+
+      }
+    });
+}
+
+function sendEmotionMessage(data,socket){
+    con.query("INSERT INTO `tblmessages` VALUES (null,"+data.idConversation+","+data.idUser+",'','','','','"+data.emo+"','"+data.time+"')", function (err, result, fields) {
+    if (err){
+
+    }else{
+        con.query("SELECT * FROM tblmessages WHERE tblmessages.IDCONVERSATION = "+data.idConversation, function (err, result, fields) {
+        if (err){
+          socket.emit('SERVER_SEND_RESULT_MESSAGES',"false");
+        }else{
+          io.sockets.emit('SERVER_SEND_RESULT_MESSAGES',{arr: result, idCon: data.idConversation});
+          console.log({arr: result, idCon: data.idConversation});
+        }   
+      });
+    }   
+  });
+}
+
+
+//SELECT IDMESSAGES,IDCONVERSATION,IDUSER,TEXT,PHOTO,CREATED_AT FROM `tblmessages` WHERE IDCONVERSATION = 9
 
 
 

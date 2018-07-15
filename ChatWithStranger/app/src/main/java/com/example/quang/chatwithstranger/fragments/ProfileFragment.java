@@ -433,7 +433,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }else {
                     tvName.setText(result);
                     user.setName(result);
-                    Prefs p = new Prefs(getContext(),Constants.KEY_USER_LOGIN,user);
+                    Prefs p = new Prefs(mainActivity,Constants.KEY_USER_LOGIN,user);
                     p.comitUser();
                 }
             }
@@ -455,7 +455,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }else {
                     tvPass.setText(result);
                     user.setPass(result);
-                    Prefs p = new Prefs(getContext(),Constants.KEY_USER_LOGIN,user);
+                    Prefs p = new Prefs(mainActivity,Constants.KEY_USER_LOGIN,user);
                     p.comitUser();
                 }
             }
@@ -477,7 +477,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }else {
                     tvEmail.setText(result);
                     user.setEmail(result);
-                    Prefs p = new Prefs(getContext(),Constants.KEY_USER_LOGIN,user);
+                    Prefs p = new Prefs(mainActivity,Constants.KEY_USER_LOGIN,user);
                     p.comitUser();
                 }
             }
@@ -499,7 +499,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }else {
                     tvPhone.setText(result);
                     user.setPhone(result);
-                    Prefs p = new Prefs(getContext(),Constants.KEY_USER_LOGIN,user);
+                    Prefs p = new Prefs(mainActivity,Constants.KEY_USER_LOGIN,user);
                     p.comitUser();
                 }
             }
@@ -522,12 +522,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     if (result == 1){
                         tvGender.setText(R.string.male);
                         user.setGender(1);
-                        Prefs p = new Prefs(getContext(),Constants.KEY_USER_LOGIN,user);
+                        Prefs p = new Prefs(mainActivity,Constants.KEY_USER_LOGIN,user);
                         p.comitUser();
                     }else if (result == 0){
                         tvGender.setText(R.string.female);
                         user.setGender(0);
-                        Prefs p = new Prefs(getContext(),Constants.KEY_USER_LOGIN,user);
+                        Prefs p = new Prefs(mainActivity,Constants.KEY_USER_LOGIN,user);
                         p.comitUser();
                     }
                 }
@@ -586,6 +586,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 
     public byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();

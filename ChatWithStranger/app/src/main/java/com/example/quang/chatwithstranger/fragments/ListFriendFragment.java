@@ -1,8 +1,12 @@
 package com.example.quang.chatwithstranger.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,9 +18,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.quang.chatwithstranger.MainActivity;
 import com.example.quang.chatwithstranger.MessageActivity;
 import com.example.quang.chatwithstranger.R;
@@ -39,12 +47,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ListFriendFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
+    Emitter.Listener onResultOnOff;
     Emitter.Listener onResultFriends;
     Emitter.Listener onResultBlocks;
     Emitter.Listener onResultCreateConversation;
     {
+        onResultOnOff = new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                resultOnOff(args[0]);
+            }
+        };
+
         onResultFriends = new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -67,6 +85,28 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         };
     }
 
+    private void resultOnOff(final Object arg) {
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                JSONArray data = (JSONArray) arg;
+                try {
+                    JSONObject obj = data.getJSONObject(0);
+                    int id = obj.getInt("IDUSER");
+                    int is_active = obj.getInt("IS_ACTIVE");
+                    for (User user:arrFriend){
+                        if (user.getId() == id){
+                            user.setIsActive(is_active);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                adapterFriends.notifyDataSetChanged();
+            }
+        });
+    }
+
     private void resultCreateConversation(final Object arg) {
         Log.e("result-----------","result");
         mainActivity.runOnUiThread(new Runnable() {
@@ -84,8 +124,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
                         int guest = object.getInt("GUEST");
 
                         conversation = new Conversation(id,title,created_at,u,guest);
-//                        mainActivity.switchMessActivity(conversation);
-                        checkSwitch = true;
                         Log.e("result-----------","result2");
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -96,22 +134,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         Log.e("result-----------","result3");
     }
 
-    private class SwitchMess extends AsyncTask<Conversation,Void,Conversation>{
-
-        @Override
-        protected Conversation doInBackground(Conversation... conversations) {
-            return conversations[0];
-        }
-
-        @Override
-        protected void onPostExecute(Conversation conversation) {
-            super.onPostExecute(conversation);
-            Intent intent = new Intent(mainActivity,MessageActivity.class);
-            intent.putExtra("conversation",conversation);
-            mainActivity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            startActivity(intent);
-        }
-    }
 
     private void resultBlocks(final Object arg) {
         mainActivity.runOnUiThread(new Runnable() {
@@ -200,11 +222,11 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
     private boolean checkOpenBlocks;
     private User user;
 
-    private boolean isRunning;
+    private Dialog dialogInfo;
+
 
     private Conversation conversation;
 
-    private boolean checkSwitch = false;
     private boolean checkClick = false;
 
     @Nullable
@@ -221,6 +243,75 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         loadData();
         initSockets();
         initViews();
+
+    }
+
+    private void initDialogInfo(final User friend) {
+
+//        JsonConversation jsonConversation = new JsonConversation(name+","+user.getName()
+//                ,user.getId(),id,Calendar.getInstance().getTime().toString());
+//        Gson gson = new Gson();
+//        try {
+//            JSONObject obj = new JSONObject(gson.toJson(jsonConversation));
+//            Singleton.Instance().getmSocket().emit(Constants.CLIENT_CREATE_CONVERSATION,obj);
+//            Log.e("click-----------","click");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+
+
+        dialogInfo = new Dialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            dialogInfo.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        else {
+            dialogInfo.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
+        dialogInfo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogInfo.setContentView(R.layout.dialog_info_friend);
+        dialogInfo.setCancelable(false);
+
+        ImageView btnDimiss = dialogInfo.findViewById(R.id.btnDimissDialog);
+        CircleImageView imPhoto = dialogInfo.findViewById(R.id.imDialogProfile);
+        TextView tvName = dialogInfo.findViewById(R.id.tvNameDialogProfile);
+        TextView tvEmail = dialogInfo.findViewById(R.id.tvEmailDialogProfile);
+        TextView tvPhone = dialogInfo.findViewById(R.id.tvPhoneDialogProfile);
+        TextView tvGender = dialogInfo.findViewById(R.id.tvGenderDialogProfile);
+        Button btnChat = dialogInfo.findViewById(R.id.btnChatDialogProfile);
+
+        Glide.with(mainActivity).load(Constants.PORT+friend.getImage()).into(imPhoto);
+        tvName.setText(friend.getName());
+        tvEmail.setText(friend.getEmail());
+        tvPhone.setText(friend.getPhone());
+        if (friend.getGender() == 1){
+            tvGender.setText(R.string.male);
+        }else {
+            tvGender.setText(R.string.female);
+        }
+
+        btnDimiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogInfo.dismiss();
+                checkClick = false;
+                conversation = null;
+            }
+        });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainActivity,MessageActivity.class);
+                intent.putExtra("friend",friend);
+                mainActivity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                startActivity(intent);
+                dialogInfo.dismiss();
+                Log.e("switch","-------------Switch");
+            }
+        });
+
+        dialogInfo.show();
+
     }
 
     @SuppressLint("NewApi")
@@ -255,6 +346,7 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
     }
 
     private void initSockets() {
+        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_STATE_ON_OFF,onResultOnOff);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_FRIENDS,onResultFriends);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_BLOCKS,onResultBlocks);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_CREATE_CONVERSATION,onResultCreateConversation);
@@ -271,30 +363,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         cardShowFriends.setOnClickListener(this);
         cardShowBlocks.setOnClickListener(this);
 
-        isRunning = true;
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (isRunning) {
-                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_GET_FRIENDS, user.getId());
-                    Singleton.Instance().getmSocket().emit(Constants.CLIENT_GET_BLOCKS, user.getId());
-
-                    if (checkSwitch){
-                        SwitchMess switchMess = new SwitchMess();
-                        switchMess.execute(conversation);
-                        checkSwitch = false;
-                        Log.e("switch-----------","switch");
-                    }
-
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        thread.start();
 
         lvFriends.setOnItemClickListener(this);
     }
@@ -323,28 +391,16 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        isRunning = false;
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
             case R.id.lvFriends:
                 if (!checkClick){
-                    JsonConversation jsonConversation = new JsonConversation(arrFriend.get(i).getName()+","+user.getName()
-                            ,user.getId(),arrFriend.get(i).getId(),Calendar.getInstance().getTime().toString());
-                    Gson gson = new Gson();
-                    try {
-                        JSONObject obj = new JSONObject(gson.toJson(jsonConversation));
-                        Singleton.Instance().getmSocket().emit(Constants.CLIENT_CREATE_CONVERSATION,obj);
-                        Log.e("click-----------","click");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                    User friend = arrFriend.get(i);
+                    initDialogInfo(friend);
+
                     checkClick = true;
                 }
                 break;

@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         User u = new User(id,user,pass,email,name,phone,gender,isActive,createdAt,image);
 
-                        Prefs prefs = new Prefs(getApplicationContext(),Constants.KEY_USER_LOGIN,u);
+                        Prefs prefs = new Prefs(LoginActivity.this,Constants.KEY_USER_LOGIN,u);
                         prefs.comitUser();
 
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);

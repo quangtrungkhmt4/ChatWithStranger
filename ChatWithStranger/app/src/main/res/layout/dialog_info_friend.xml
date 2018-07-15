@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:background="@color/colorPrimary"
+                    android:padding="30dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/btnDimissDialog"
+                        android:src="@drawable/ic_action_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_gravity="center"
+                        android:id="@+id/imDialogProfile"
+                        android:scaleType="centerCrop"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/user"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp" />
+
+                    <com.example.quang.chatwithstranger.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:text="Name"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/imDialogProfile"
+                        android:id="@+id/tvNameDialogProfile"
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorBackround"
+                        style="?android:attr/textAppearanceMedium"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.example.quang.chatwithstranger.views.CustomTextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:text="@string/email"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_action_email"
+                    style="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <com.example.quang.chatwithstranger.views.CustomTextView
+                android:layout_width="wrap_content"
+                android:text="@string/email"
+                android:id="@+id/tvEmailDialogProfile"
+                android:gravity="center_vertical"
+                android:padding="2dp"
+                android:layout_marginLeft="60dp"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimary"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.example.quang.chatwithstranger.views.CustomTextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:text="@string/phone"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_action_phone"
+                    style="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <com.example.quang.chatwithstranger.views.CustomTextView
+                android:layout_width="wrap_content"
+                android:text="@string/phone"
+                android:id="@+id/tvPhoneDialogProfile"
+                android:gravity="center_vertical"
+                android:padding="2dp"
+                android:layout_marginLeft="60dp"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimary"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.example.quang.chatwithstranger.views.CustomTextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:text="@string/gender"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_action_gender"
+                    style="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <com.example.quang.chatwithstranger.views.CustomTextView
+                android:layout_width="wrap_content"
+                android:text="@string/gender"
+                android:id="@+id/tvGenderDialogProfile"
+                android:gravity="center_vertical"
+                android:padding="2dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="60dp"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimary"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnChatDialogProfile"
+                style="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorBackround"
+                android:text="@string/chatting"
+                android:layout_marginBottom="70dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/background_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

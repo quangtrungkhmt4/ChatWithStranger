@@ -40,4 +40,5 @@
     <string name="blocks">Chặn</string>
     <string name="text_message">Aa</string>
     <string name="list_chat">Danh sách hội thoại</string>
+    <string name="chatting">Nhắn tin</string>
 </resources>

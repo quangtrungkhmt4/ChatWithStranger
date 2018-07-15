@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".MessageActivity">
@@ -18,14 +19,27 @@
             android:layout_height="match_parent"></android.support.v7.widget.Toolbar>
     </android.support.v7.widget.CardView>
 
-    <ListView
-        android:layout_weight="1"
-        android:id="@+id/lvMessage"
+    <!--<ListView-->
+        <!--android:layout_weight="1"-->
+        <!--android:divider="@null"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:id="@+id/lvMessage"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"></ListView>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/reyclerview_message_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+    </android.support.v7.widget.RecyclerView>
 
     <android.support.v7.widget.CardView
-        android:layout_below="@id/lvMessage"
+        android:layout_below="@id/reyclerview_message_list"
         android:id="@+id/cardtext"
         android:layout_width="match_parent"
         android:backgroundTint="@color/colorPrimary"
@@ -94,6 +108,23 @@
                 android:src="@drawable/ic_action_send_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardEmotion"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+            <GridView
+                android:id="@+id/gvEmotion"
+                android:verticalSpacing="5dp"
+                android:horizontalSpacing="2dp"
+                android:numColumns="5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></GridView>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

@@ -1,6 +1,8 @@
 package com.example.quang.chatwithstranger.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +20,16 @@ import com.example.quang.chatwithstranger.model.User;
 import java.util.ArrayList;
 
 public class ListMessageAdapter extends BaseAdapter {
+    private LayoutInflater inflater;
     private Context context;
-    private int layout_left;
-    private int layout_right;
     private ArrayList<Message> arrItem;
-    private String avatarGuest;
+    private int idUser;
 
-    public ListMessageAdapter(Context context, int layout, int layout_right, ArrayList<Message> arrItem, String avatarGuest) {
+    public ListMessageAdapter(Context context, ArrayList<Message> arrItem,int idUser) {
+        inflater = LayoutInflater.from(context);
         this.context = context;
-        this.layout_left = layout;
-        this.layout_right = layout_right;
         this.arrItem = arrItem;
-        this.avatarGuest = avatarGuest;
+        this.idUser = idUser;
     }
 
     private class ViewHolder{
@@ -56,98 +56,66 @@ public class ListMessageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View viewRow = view;
         Prefs prefs = new Prefs(context);
         User user = prefs.getUser(context,Constants.KEY_USER_LOGIN);
 
         Message message = arrItem.get(i);
 
-        if (message.getIdUser() == user.getId()){
 
-            if(viewRow == null)
+        ViewHolder viewHolder;
+        if (view == null)
+        {
+            viewHolder = new ViewHolder();
+            if (message.getIdUser() == idUser)
             {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                if (inflater != null) {
-                    viewRow = inflater.inflate(layout_right,viewGroup,false);
-                }
-
-                ViewHolder holder = new ViewHolder();
-                if (viewRow != null) {
-                    holder.tvText = viewRow.findViewById(R.id.tvTextItemMessage);
-                }
-                if (viewRow != null) {
-                    holder.imAvatar = viewRow.findViewById(R.id.imAvatarItemMessage);
-                }
-                if (viewRow != null) {
-                    holder.tvTime = viewRow.findViewById(R.id.tvTimeItemMessase);
-                }
-                if (viewRow != null) {
-                    holder.imPhoto = viewRow.findViewById(R.id.imPhotoItemMessage);
-                }
-
-                if (viewRow != null) {
-                    viewRow.setTag(holder);
-                }
+                view = inflater.inflate(R.layout.item_chat_user,viewGroup,false);
             }
-            ViewHolder holder = null;
-            if (viewRow != null) {
-                holder = (ViewHolder) viewRow.getTag();
+            else
+            {
+                view = inflater.inflate(R.layout.item_chat_guest,viewGroup,false);
             }
+            viewHolder.tvText = view.findViewById(R.id.tvTextItemMessage);
+            viewHolder.tvTime = view.findViewById(R.id.tvTimeItemMessase);
+            viewHolder.imAvatar = view.findViewById(R.id.imAvatarItemMessage);
+            viewHolder.imPhoto = view.findViewById(R.id.imPhotoItemMessage);
+            view.setTag(viewHolder);
+        }
+        else
+        {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+        if (message.getIdUser() == idUser)
+        {
+            Glide.with(context).load(Constants.PORT+user.getImage()).into(viewHolder.imAvatar);
+        }
+        else if (message.getIdUser() != idUser)
+        {
+            Glide.with(context).load(Constants.PORT+message.getAvatar()).into(viewHolder.imAvatar);
+        }
+        viewHolder.tvTime.setText(message.getTime());
 
-            holder.tvText.setText(message.getText());
-            holder.tvTime.setText(message.getTime());
-
-            if (!message.getPhoto().equalsIgnoreCase("")){
-                Glide.with(context).load(Constants.PORT+message.getPhoto()).into(holder.imPhoto);
-            }
-            if (holder != null) {
-                Glide.with(context).load(Constants.PORT+user.getImage()).into(holder.imAvatar);
-            }
-
+        if (!message.getText().equalsIgnoreCase("")){
+            viewHolder.tvText.setText(message.getText());
+        }
+//        else if (!message.getEmotion().equalsIgnoreCase("")){
+//            viewHolder.tvText.setText(getEmojiByUnicode(Integer.parseInt(message.getEmotion().substring(2), 16)));
+//        }
+        else if (!message.getPhoto().equalsIgnoreCase("")){
+            Glide.with(context).load(Constants.PORT+message.getPhoto()).into(viewHolder.imPhoto);
+            viewHolder.tvText.setBackgroundColor(Color.WHITE);
         }else {
-            if(viewRow == null)
-            {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                if (inflater != null) {
-                    viewRow = inflater.inflate(layout_left,viewGroup,false);
-                }
-
-                ViewHolder holder = new ViewHolder();
-                if (viewRow != null) {
-                    holder.tvText = viewRow.findViewById(R.id.tvTextItemMessage);
-                }
-                if (viewRow != null) {
-                    holder.imAvatar = viewRow.findViewById(R.id.imAvatarItemMessage);
-                }
-                if (viewRow != null) {
-                    holder.tvTime = viewRow.findViewById(R.id.tvTimeItemMessase);
-                }
-                if (viewRow != null) {
-                    holder.imPhoto = viewRow.findViewById(R.id.imPhotoItemMessage);
-                }
-
-                if (viewRow != null) {
-                    viewRow.setTag(holder);
-                }
-            }
-            ViewHolder holder = null;
-            if (viewRow != null) {
-                holder = (ViewHolder) viewRow.getTag();
-            }
-
-            holder.tvText.setText(message.getText());
-            holder.tvTime.setText(message.getTime());
-
-            if (!message.getPhoto().equalsIgnoreCase("")){
-                Glide.with(context).load(Constants.PORT+message.getPhoto()).into(holder.imPhoto);
-            }
-            if (holder != null) {
-                Glide.with(context).load(Constants.PORT+avatarGuest).into(holder.imAvatar);
-            }
+            viewHolder.imPhoto.setVisibility(View.GONE);
         }
 
-
-
-        return viewRow;
+        return view;
     }
+
+    public String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
+    }
+
+
+
 }
+
+
