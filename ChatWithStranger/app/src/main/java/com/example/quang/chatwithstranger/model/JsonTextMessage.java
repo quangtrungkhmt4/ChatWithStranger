@@ -6,13 +6,15 @@ public class JsonTextMessage {
     private String text;
     private String time;
     private int idLastMess;
+    private int idReciever;
 
-    public JsonTextMessage(int idConversation, int idUser, String text, String time,int idLastMess) {
+    public JsonTextMessage(int idConversation, int idUser, String text, String time,int idLastMess, int idReciever) {
         this.idConversation = idConversation;
         this.idUser = idUser;
         this.text = text;
         this.time = time;
         this.idLastMess = idLastMess;
+        this.idReciever = idReciever;
     }
 
     public int getIdConversation() {
@@ -53,5 +55,13 @@ public class JsonTextMessage {
 
     public void setIdLastMess(int idLastMess) {
         this.idLastMess = idLastMess;
+    }
+
+    public int getIdReciever() {
+        return idReciever;
+    }
+
+    public void setIdReciever(int idReciever) {
+        this.idReciever = idReciever;
     }
 }

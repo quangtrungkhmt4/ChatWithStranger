@@ -22,6 +22,7 @@ import com.example.quang.chatwithstranger.model.Conversation;
 import com.example.quang.chatwithstranger.model.JsonConversation;
 import com.example.quang.chatwithstranger.model.Prefs;
 import com.example.quang.chatwithstranger.model.User;
+import com.example.quang.chatwithstranger.service.AppService;
 import com.example.quang.chatwithstranger.singleton.Singleton;
 import com.github.nkzawa.emitter.Emitter;
 
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         findID();
         initSockets();
         initViews();
+
+        Intent intent = new Intent(this, AppService.class);
+        startService(intent);
     }
 
     private void initSockets() {
@@ -142,5 +146,10 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("conversation",conversation);
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

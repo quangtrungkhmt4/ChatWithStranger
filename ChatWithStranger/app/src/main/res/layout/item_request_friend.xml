@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="80dp"
+        android:id="@+id/imAvatarRequest"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@color/colorPrimary"
+        android:layout_height="80dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.quang.chatwithstranger.views.CustomTextView
+            android:layout_width="wrap_content"
+            android:text="Name"
+            android:lines="1"
+            android:id="@+id/tvNameRequest"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            style="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btnYesRequest"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:layout_weight="1"
+                android:textColor="@color/colorBackround"
+                android:text="@string/yes"
+                android:background="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btnNoRequest"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/no"
+                android:background="@color/colorBackround"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

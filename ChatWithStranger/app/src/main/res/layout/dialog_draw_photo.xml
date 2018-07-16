@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackround"
+    android:layout_height="400dp">
+
+    <android.support.v7.widget.CardView
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_marginLeft="15dp"
+                android:id="@+id/imBackDialogDraw"
+                android:layout_gravity="center_vertical|left"
+                android:src="@drawable/ic_action_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_marginRight="20dp"
+                android:id="@+id/imBackLineDialogDraw"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/ic_action_back_draw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_marginLeft="20dp"
+                android:id="@+id/imNextDialogDraw"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/ic_action_next_draw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!--<ImageView-->
+                <!--android:layout_marginLeft="60dp"-->
+                <!--android:id="@+id/imColorDialogDraw"-->
+                <!--android:layout_gravity="center_vertical|center_horizontal"-->
+                <!--android:src="@drawable/ic_action_color_draw"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <ImageView
+                android:id="@+id/imDoneDialogDraw"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical|right"
+                android:src="@drawable/ic_action_done_draw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+    <LinearLayout
+        android:id="@+id/lnDraw"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></LinearLayout>
+</LinearLayout>

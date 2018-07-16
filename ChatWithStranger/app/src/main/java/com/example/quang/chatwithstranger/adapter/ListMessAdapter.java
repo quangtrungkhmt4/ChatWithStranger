@@ -100,18 +100,38 @@ public class ListMessAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageText.setText(message.getText());
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(message.getTime());
             Glide.with(mContext).load(Constants.PORT+message.getAvatar()).into(avatar);
 
             if (!message.getPhoto().equalsIgnoreCase("")){
+                imageView.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(Constants.PORT+message.getPhoto()).into(imageView);
                 messageText.setVisibility(View.GONE);
             }else{
+                String txt = "";
+                if (message.getText().contains("0x1F")){
+                    String[] arr = message.getText().split(" ");
+                    for (int i=0; i<arr.length;i++){
+                        if (arr[i].contains("0x1F")){
+                            int u = Integer.parseInt(arr[i].substring(2), 16);
+                            txt = txt + " " + getEmojiByUnicode(u);
+                        }else {
+                            txt = txt + " " + arr[i];
+                        }
+                    }
+                    messageText.setText(txt);
+                }else {
+                    messageText.setText(message.getText());
+                }
+                messageText.setVisibility(View.VISIBLE);
                 imageView.setVisibility(View.GONE);
             }
+        }
+
+        public String getEmojiByUnicode(int unicode){
+            return new String(Character.toChars(unicode));
         }
 
         @Override
@@ -136,7 +156,7 @@ public class ListMessAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageText.setText(message.getText());
+
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(message.getTime());
@@ -144,11 +164,32 @@ public class ListMessAdapter extends RecyclerView.Adapter {
             // Insert the profile image from the URL into the ImageView.
             Glide.with(mContext).load(Constants.PORT+message.getAvatar()).into(profileImage);
             if (!message.getPhoto().equalsIgnoreCase("")){
+                imPhoto.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(Constants.PORT+message.getPhoto()).into(imPhoto);
                 messageText.setVisibility(View.GONE);
             }else{
+                String txt = "";
+                if (message.getText().contains("0x1F")){
+                    String[] arr = message.getText().split(" ");
+                    for (int i=0; i<arr.length;i++){
+                        if (arr[i].contains("0x1F")){
+                            int u = Integer.parseInt(arr[i].substring(2), 16);
+                            txt = txt + " " + getEmojiByUnicode(u);
+                        }else {
+                            txt = txt + " " + arr[i];
+                        }
+                    }
+                    messageText.setText(txt);
+                }else {
+                    messageText.setText(message.getText());
+                }
+                messageText.setVisibility(View.VISIBLE);
                 imPhoto.setVisibility(View.GONE);
             }
+        }
+
+        public String getEmojiByUnicode(int unicode){
+            return new String(Character.toChars(unicode));
         }
 
         @Override

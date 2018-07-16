@@ -1,6 +1,7 @@
 package com.example.quang.chatwithstranger.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.example.quang.chatwithstranger.model.Prefs;
 import com.example.quang.chatwithstranger.model.User;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ListConversationAdapter extends BaseAdapter {
     private Context context;
@@ -83,6 +86,10 @@ public class ListConversationAdapter extends BaseAdapter {
         Prefs prefs = new Prefs(context);
         User user = prefs.getUser(context,Constants.KEY_USER_LOGIN);
 
+        SharedPreferences pre=context.getSharedPreferences("data_chat", MODE_PRIVATE);
+        String listCon = pre.getString("listCon","");
+
+
         String[] arrName = item.getTitle().split(",");
         if (user.getName().equalsIgnoreCase(arrName[0])){
             holder.tvName.setText(arrName[1]);
@@ -91,7 +98,12 @@ public class ListConversationAdapter extends BaseAdapter {
         }
 
         if (holder != null) {
-            holder.imIsActive.setVisibility(View.INVISIBLE);
+            if (listCon.contains(item.getId()+"")){
+                holder.imIsActive.setImageResource(R.drawable.ic_action_new_mess);
+            }else {
+                holder.imIsActive.setVisibility(View.INVISIBLE);
+            }
+
         }
         if (holder != null) {
             holder.imAvatar.setImageResource(R.drawable.ic_action_group);

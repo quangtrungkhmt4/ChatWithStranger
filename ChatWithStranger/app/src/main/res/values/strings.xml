@@ -41,4 +41,11 @@
     <string name="text_message">Aa</string>
     <string name="list_chat">Danh sách hội thoại</string>
     <string name="chatting">Nhắn tin</string>
+    <string name="stranger">Người lạ</string>
+    <string name="list_stranger">Danh sách người lạ</string>
+    <string name="yes">Chấp nhận</string>
+    <string name="no">Từ chối</string>
+    <string name="list_request">Lời mời kết bạn</string>
+    <string name="question">Bạn có muốn gửi lời mời kết bạn cho người này không?</string>
+    <string name="add">Kết bạn</string>
 </resources>

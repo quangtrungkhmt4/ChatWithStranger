@@ -25,13 +25,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.quang.chatwithstranger.ListStrangerActivity;
 import com.example.quang.chatwithstranger.MainActivity;
 import com.example.quang.chatwithstranger.MessageActivity;
 import com.example.quang.chatwithstranger.R;
+import com.example.quang.chatwithstranger.RequestFriendActivity;
 import com.example.quang.chatwithstranger.adapter.ListFriendsAdapter;
 import com.example.quang.chatwithstranger.consts.Constants;
 import com.example.quang.chatwithstranger.model.Conversation;
 import com.example.quang.chatwithstranger.model.JsonConversation;
+import com.example.quang.chatwithstranger.model.ListFriend;
 import com.example.quang.chatwithstranger.model.Prefs;
 import com.example.quang.chatwithstranger.model.User;
 import com.example.quang.chatwithstranger.singleton.Singleton;
@@ -54,7 +57,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
     Emitter.Listener onResultOnOff;
     Emitter.Listener onResultFriends;
     Emitter.Listener onResultBlocks;
-    Emitter.Listener onResultCreateConversation;
     {
         onResultOnOff = new Emitter.Listener() {
             @Override
@@ -77,12 +79,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
             }
         };
 
-        onResultCreateConversation = new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                resultCreateConversation(args[0]);
-            }
-        };
     }
 
     private void resultOnOff(final Object arg) {
@@ -106,34 +102,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
             }
         });
     }
-
-    private void resultCreateConversation(final Object arg) {
-        Log.e("result-----------","result");
-        mainActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.e("result-----------","result1");
-                JSONArray data = (JSONArray) arg;
-                if(data.length() == 1){
-                    try {
-                        JSONObject object = data.getJSONObject(0);
-                        int id = object.getInt("IDCONVERSATION");
-                        String title = object.getString("TITLE");
-                        String created_at = object.getString("CREATED_AT");
-                        int u = object.getInt("USER");
-                        int guest = object.getInt("GUEST");
-
-                        conversation = new Conversation(id,title,created_at,u,guest);
-                        Log.e("result-----------","result2");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        Log.e("result-----------","result3");
-    }
-
 
     private void resultBlocks(final Object arg) {
         mainActivity.runOnUiThread(new Runnable() {
@@ -175,26 +143,33 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
             @Override
             public void run() {
                 arrFriend.clear();
-                JSONArray data = (JSONArray) arg;
-                for (int i=0; i<data.length();i++){
-                    try {
-                        JSONObject object = data.getJSONObject(i);
-                        int id = object.getInt("IDUSER");
-                        String user = object.getString("USER");
-                        String pass = object.getString("PASSWORD");
-                        String email = object.getString("EMAIL");
-                        String name = object.getString("FULLNAME");
-                        String phone = object.getString("PHONE");
-                        int gender = object.getInt("GENDER");
-                        int isActive = object.getInt("IS_ACTIVE");
-                        String createdAt = object.getString("CREATED_AT");
-                        String image = object.getString("IMAGE");
+                JSONObject obj = (JSONObject) arg;
+                try {
+                    int idCon = obj.getInt("idContact");
+                    idContact = idCon;
+                    JSONArray data = (JSONArray) obj.getJSONArray("arr");
+                    for (int i=0; i<data.length();i++){
+                        try {
+                            JSONObject object = data.getJSONObject(i);
+                            int id = object.getInt("IDUSER");
+                            String user = object.getString("USER");
+                            String pass = object.getString("PASSWORD");
+                            String email = object.getString("EMAIL");
+                            String name = object.getString("FULLNAME");
+                            String phone = object.getString("PHONE");
+                            int gender = object.getInt("GENDER");
+                            int isActive = object.getInt("IS_ACTIVE");
+                            String createdAt = object.getString("CREATED_AT");
+                            String image = object.getString("IMAGE");
 
-                        User u = new User(id,user,pass,email,name,phone,gender,isActive,createdAt,image);
-                        arrFriend.add(u);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            User u = new User(id,user,pass,email,name,phone,gender,isActive,createdAt,image);
+                            arrFriend.add(u);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
                 tvCountFriends.setText("("+arrFriend.size()+")");
@@ -224,10 +199,13 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
 
     private Dialog dialogInfo;
 
+    private ImageView imRequestFriend;
+
 
     private Conversation conversation;
 
     private boolean checkClick = false;
+    private int idContact;
 
     @Nullable
     @Override
@@ -324,6 +302,7 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         btnRandom = getActivity().findViewById(R.id.btnRandon);
         tvCountFriends = getActivity().findViewById(R.id.tvCountFriends);
         tvCountBlocks = getActivity().findViewById(R.id.tvCountBlocks);
+        imRequestFriend = getActivity().findViewById(R.id.imCheckAddFriend);
     }
 
     private void loadData(){
@@ -349,7 +328,6 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_STATE_ON_OFF,onResultOnOff);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_FRIENDS,onResultFriends);
         Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_BLOCKS,onResultBlocks);
-        Singleton.Instance().getmSocket().on(Constants.SERVER_SEND_RESULT_CREATE_CONVERSATION,onResultCreateConversation);
     }
 
     @SuppressLint("NewApi")
@@ -365,6 +343,9 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
 
 
         lvFriends.setOnItemClickListener(this);
+        btnRandom.setOnClickListener(this);
+
+        imRequestFriend.setOnClickListener(this);
     }
 
     @Override
@@ -387,6 +368,25 @@ public class ListFriendFragment extends Fragment implements View.OnClickListener
                     lvBlocks.setVisibility(View.GONE);
                     checkOpenBlocks = false;
                 }
+                break;
+            case R.id.btnRandon:
+                ArrayList<User> arrOnline = new ArrayList<>();
+                for (int i=0; i<arrFriend.size();i++){
+                    if (arrFriend.get(i).getIsActive() == 1){
+                        arrOnline.add(arrFriend.get(i));
+                    }
+                }
+                Intent intent = new Intent(mainActivity, ListStrangerActivity.class);
+                ListFriend lf = new ListFriend(arrOnline,idContact);
+                intent.putExtra("listFriend",lf);
+                mainActivity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                mainActivity.startActivity(intent);
+                break;
+            case R.id.imCheckAddFriend:
+                Intent i = new Intent(mainActivity, RequestFriendActivity.class);
+                mainActivity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                mainActivity.startActivity(i);
+                mainActivity.finish();
                 break;
         }
     }

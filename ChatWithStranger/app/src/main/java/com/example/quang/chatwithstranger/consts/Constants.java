@@ -5,6 +5,7 @@ public interface Constants {
     public static final String KEY_USER_LOGIN = "KEY_USER_LOGIN";
 
     public static final String PORT = "http://192.168.108.101:3000";
+
     public static final String SERVER_SEND_RESULT_LOGIN = "SERVER_SEND_RESULT_LOGIN";
     public static final String CLIENT_SEND_USER_PASS_LOGIN = "CLIENT_SEND_USER_PASS_LOGIN";
     public static final String CLIENT_SEND_USER_CHECK_EXISTS = "CLIENT_SEND_USER_CHECK_EXISTS";
@@ -60,5 +61,20 @@ public interface Constants {
     public static final String SERVER_SEND_STATE_ON_OFF = "SERVER_SEND_STATE_ON_OFF";
 
     public static final String SERVER_SEND_UPDATE_MESSAGES = "SERVER_SEND_UPDATE_MESSAGES";
+    public static final String CLIENT_GET_ALL_USER_ONLINE = "CLIENT_GET_ALL_USER_ONLINE";
+    public static final String SERVER_SEND_RESULT_USER_ONLINE = "SERVER_SEND_RESULT_USER_ONLINE";
+    public static final String SERVER_SEND_NEW_MESSAGE = "SERVER_SEND_NEW_MESSAGE";
+
+    public static final String CLIENT_GET_GUEST_CONVERSATION = "CLIENT_GET_GUEST_CONVERSATION";
+    public static final String SERVER_SEND_RESULT_GUEST_CONVERSATION = "SERVER_SEND_RESULT_GUEST_CONVERSATION";
+
+    public static final String CLIENT_GET_ALL_REQUEST_FRIEND = "CLIENT_GET_ALL_REQUEST_FRIEND";
+    public static final String SERVER_SEND_ALL_REQUEST_FRIEND = "SERVER_SEND_ALL_REQUEST_FRIEND";
+
+    public static final String CLIENT_DELETE_REQUEST_FRIEND = "CLIENT_DELETE_REQUEST_FRIEND";
+    public static final String CLIENT_ACCEPT_REQUEST_FRIEND = "CLIENT_ACCEPT_REQUEST_FRIEND";
+
+
+    public static final String CILENT_SEND_REQUEST_ADD_FRIEND = "CILENT_SEND_REQUEST_ADD_FRIEND";
 
 }

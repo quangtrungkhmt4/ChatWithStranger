@@ -106,11 +106,36 @@ io.sockets.on('connection', function (socket) {
     sendPhotoMessage(data,socket);
   }); 
 
-    socket.on('CLIENT_SEND_EMOTION_MESSAGE', function(data){
+
+    socket.on('CLIENT_GET_ALL_USER_ONLINE', function(data){
     //socket.un = data;
-    sendEmotionMessage(data,socket);
+    getAllUserOnline(data,socket);
   });
 
+    socket.on('CLIENT_GET_GUEST_CONVERSATION', function(data){
+    //socket.un = data;
+    getGuestConversation(data,socket);
+  });
+
+    socket.on('CLIENT_GET_ALL_REQUEST_FRIEND', function(data){
+    //socket.un = data;
+    getAllRequestFriend(data,socket);
+  });
+
+    socket.on('CLIENT_DELETE_REQUEST_FRIEND', function(data){
+    //socket.un = data;
+    deleteRequestFriend(data,socket);
+  });
+
+    socket.on('CLIENT_ACCEPT_REQUEST_FRIEND', function(data){
+    //socket.un = data;
+    acceptRequestFriend(data,socket);
+  });
+
+    socket.on('CILENT_SEND_REQUEST_ADD_FRIEND', function(data){
+    //socket.un = data;
+    sendRequestAddFriend(data,socket);
+  });
 
   
 });
@@ -209,6 +234,14 @@ function registerUser(data,socket){
             con.query("INSERT INTO `tblreports` VALUES (null,"+id+")", function (err, result, fields) {
             if (err) throw err;
               
+          });
+
+            con.query("INSERT INTO `tblrequestfriends` VALUES (null,"+id+")", function (err, result, fields) {
+            if (err){
+
+            }else{
+
+            }
           });
 
         });
@@ -334,12 +367,12 @@ function getFriends(data,socket){
     if (err){
 
     }else{
-
+        var id = result[0].IDCONTACT;
         con.query("SELECT * FROM tblusers INNER JOIN tbluserscontact on tblusers.IDUSER = tbluserscontact.IDUSER WHERE tbluserscontact.IDCONTACT = "+result[0].IDCONTACT+ "", function (err, result, fields) {
         if (err){
 
         }else{
-          socket.emit('SERVER_SEND_RESULT_FRIENDS',result);
+          socket.emit('SERVER_SEND_RESULT_FRIENDS',{arr: result,idContact: id});
         }
 
       });
@@ -368,50 +401,28 @@ function getBlocks(data,socket){
 }
 
 function createConversation(data,socket){
-
     con.query("SELECT tblconversation.IDCONVERSATION, tblconversation.TITLE, tblconversation.CREATED_AT, tblconversation.IDUSER AS 'USER', tblparticipants.IDUSER AS 'GUEST' FROM tblconversation INNER JOIN tblparticipants ON tblconversation.IDCONVERSATION = tblparticipants.IDCONVERSATION WHERE (tblconversation.IDUSER = "+data.idUser+" OR tblparticipants.IDUSER = "+data.idUser+") AND (tblconversation.IDUSER = "+data.idGuest+" OR tblparticipants.IDUSER = "+data.idGuest+") GROUP BY tblconversation.IDCONVERSATION", function (err, result, fields) {
     if (err) throw err;
-    if (result.length != 0) {
-      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',result);
-      console.log(result);
-    }
-    else{
-
-
+    if (result.length == 0){
         con.query("INSERT INTO `tblconversation` VALUES (null,'"+data.title+"','"+data.time+"',"+data.idUser+ ")", function (err, result, fields) {
-        if (err){
-          socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
-        }else{
+        if (err) throw err;
             con.query("SELECT `IDCONVERSATION` FROM `tblconversation` WHERE `TITLE` = '"+data.title+"'", function (err, result, fields) {
-            var idConversation = result[0].IDCONVERSATION;
-            if (err){
-              socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
-            }else{
+            if (err) throw err;
+            var idConversation = result[0].IDCONVERSATION; 
                 con.query("INSERT INTO `tblparticipants` VALUES (null,"+idConversation+","+data.idGuest+")", function (err, result, fields) {
                 if (err){
                   socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
                 }else{
-                    con.query("SELECT tblconversation.IDCONVERSATION, tblconversation.TITLE, tblconversation.CREATED_AT, tblconversation.IDUSER AS 'USER', tblparticipants.IDUSER AS 'GUEST' FROM tblconversation INNER JOIN tblparticipants ON tblconversation.IDCONVERSATION = tblparticipants.IDCONVERSATION WHERE (tblconversation.IDUSER = "+data.idUser+" OR tblparticipants.IDUSER = "+data.idUser+") AND (tblconversation.IDUSER = "+data.idGuest+" OR tblparticipants.IDUSER = "+data.idGuest+") GROUP BY tblconversation.IDCONVERSATION", function (err, result, fields) {
-                    if (err){
-                      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"false");
-                    }else{
-                      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',result);
-                      console.log("create conversation success!");
-                      console.log(result);
-                    }
-                  });
+                  socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"true");
                 }
-              });
-            }   
-          });
-        }  
 
-      });
-
-
+                });
+            });
+        });
+    }else{
+      socket.emit('SERVER_SEND_RESULT_CREATE_CONVERSATION',"true");
     }
-  });
-
+    });
 }
 
 function getConversations(data,socket){
@@ -479,7 +490,8 @@ function sendTextMessage(data,socket){
             socket.emit('SERVER_SEND_UPDATE_MESSAGES',"false");
           }else{
             io.sockets.emit('SERVER_SEND_UPDATE_MESSAGES',{arr: result, idCon: data.idConversation});
-            console.log({arr: result, idCon: data.idConversation});
+            io.sockets.emit('SERVER_SEND_NEW_MESSAGE',{idFriend: data.idReciever, idCon: data.idConversation});
+            console.log({idFriend: data.idReciever, idCon: data.idConversation});
           }   
         }); 
     }   
@@ -506,7 +518,8 @@ function sendPhotoMessage(data,socket){
                 socket.emit('SERVER_SEND_UPDATE_MESSAGES',"false");
               }else{
                 io.sockets.emit('SERVER_SEND_UPDATE_MESSAGES',{arr: result, idCon: data.idConversation});
-                console.log({arr: result, idCon: data.idConversation});
+                io.sockets.emit('SERVER_SEND_NEW_MESSAGE',{idFriend: data.idReciever, idCon: data.idConversation});
+                console.log({idFriend: data.idReciever, idCon: data.idConversation});
               }   
             }); 
           }   
@@ -516,25 +529,110 @@ function sendPhotoMessage(data,socket){
     });
 }
 
-function sendEmotionMessage(data,socket){
-    con.query("INSERT INTO `tblmessages` VALUES (null,"+data.idConversation+","+data.idUser+",'','','','','"+data.emo+"','"+data.time+"')", function (err, result, fields) {
-    if (err){
-
-    }else{
-        con.query("SELECT * FROM tblmessages WHERE tblmessages.IDCONVERSATION = "+data.idConversation, function (err, result, fields) {
+function getAllUserOnline(data,socket){
+        con.query("SELECT * FROM tblusers WHERE tblusers.IDUSER != "+data+" AND tblusers.IS_ACTIVE = 1", function (err, result, fields) {
         if (err){
-          socket.emit('SERVER_SEND_RESULT_MESSAGES',"false");
+
         }else{
-          io.sockets.emit('SERVER_SEND_RESULT_MESSAGES',{arr: result, idCon: data.idConversation});
-          console.log({arr: result, idCon: data.idConversation});
-        }   
+          socket.emit('SERVER_SEND_RESULT_USER_ONLINE',result);
+        }
       });
-    }   
-  });
 }
 
 
+function getGuestConversation(data,socket){
+        con.query("SELECT * FROM tblusers", function (err, result, fields) {
+        if (err){
+
+        }else{
+          socket.emit('SERVER_SEND_RESULT_GUEST_CONVERSATION',result);
+          console.log(result);
+        }
+      });
+}
+
+function getAllRequestFriend(data,socket){
+        con.query("SELECT tblrequestfriends.IDUSER, tblusers.FULLNAME, tblusers.IMAGE, tblrequestfriends.IDREQUESTFRIEND FROM tblrequestfriends INNER JOIN tbluserrequestfriend on tblrequestfriends.IDREQUESTFRIEND = tbluserrequestfriend.IDREQUESTFRIEND INNER JOIN tblusers on tblrequestfriends.IDUSER = tblusers.IDUSER WHERE tbluserrequestfriend.IDUSER = " +data, function (err, result, fields) {
+        if (err){
+
+        }else{
+          socket.emit('SERVER_SEND_ALL_REQUEST_FRIEND',result);
+          console.log(result);
+        }
+      });
+}
+
+function deleteRequestFriend(data,socket){
+    var arr = data.split("-");
+        con.query("DELETE FROM `tbluserrequestfriend` WHERE IDREQUESTFRIEND = "+arr[0]+" AND IDUSER = "+arr[2], function (err, result, fields) {
+        if (err){
+        }else{
+        }
+      });
+}
+
+function acceptRequestFriend(data,socket){
+    var arr = data.split("-");
+        con.query("DELETE FROM `tbluserrequestfriend` WHERE IDREQUESTFRIEND = "+arr[0]+" AND IDUSER = "+arr[2], function (err, result, fields) {
+        if (err){
+        }else{
+                con.query("SELECT `IDCONTACT` FROM `tblcontacts` WHERE IDUSER = "+arr[2], function (err, result, fields) {
+                if (err){
+                }else{
+                    var idContact = result[0].IDCONTACT;
+                    var date = new Date();
+                    con.query("INSERT INTO `tbluserscontact` VALUES (null,"+idContact+","+arr[1]+",'"+date+"')", function (err, result, fields) {
+                      if (err){
+                      }else{
+
+                      }
+                    });
+                }
+              });
+
+
+                con.query("SELECT `IDCONTACT` FROM `tblcontacts` WHERE IDUSER = "+arr[1], function (err, result, fields) {
+                if (err){
+                }else{
+                    var idContact = result[0].IDCONTACT;
+                    var date = new Date();
+                    con.query("INSERT INTO `tbluserscontact` VALUES (null,"+idContact+","+arr[2]+",'"+date+"')", function (err, result, fields) {
+                      if (err){
+                      }else{
+
+                      }
+                    });
+                }
+              });
+        }
+      });
+}
+
+function sendRequestAddFriend(data,socket){
+  var arr = data.split("-");
+  var date = new Date();
+        con.query("SELECT `IDREQUESTFRIEND` FROM `tblrequestfriends` WHERE IDUSER = "+arr[0], function (err, result, fields) {
+        if (err){
+
+        }else{
+          console.log(result);
+            var id = result[0].IDREQUESTFRIEND;
+              con.query("INSERT INTO `tbluserrequestfriend` VALUES (null,"+id+","+arr[1]+",'"+date+"')", function (err, result, fields) {
+              if (err){
+
+              }else{
+                  
+              }
+            });
+        }
+      });
+}
+
+
+
 //SELECT IDMESSAGES,IDCONVERSATION,IDUSER,TEXT,PHOTO,CREATED_AT FROM `tblmessages` WHERE IDCONVERSATION = 9
+
+//SELECT * FROM tblusers INNER JOIN tbluserscontact ON tblusers.IDUSER = tbluserscontact.IDUSER WHERE tbluserscontact.IDCONTACT = 12SELECT * FROM tblusers INNER JOIN tbluserscontact ON tblusers.IDUSER = tbluserscontact.IDUSER WHERE tbluserscontact.IDCONTACT = 12 AND tblusers.IS_ACTIVE = 1
 
 
 

@@ -28,6 +28,7 @@
             android:layout_height="50dp" />
 
         <com.example.quang.chatwithstranger.views.CustomTextView
+            android:visibility="gone"
             android:id="@+id/tvTextItemMessage"
             android:textColor="@color/colorBackround"
             android:background="@color/colorPrimary"
@@ -40,6 +41,7 @@
             android:layout_height="wrap_content" />
 
         <ImageView
+            android:visibility="gone"
             android:scaleType="centerCrop"
             android:id="@+id/imPhotoItemMessage"
             android:padding="10dp"
