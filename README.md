@@ -1,7 +1,7 @@
 # ChatWithStranger
 Chat with stranger application
 
-Cài đặt: Cài đặt nodejs, xampp và git. Tạo một Database với tên 'chatwithstranger' trên xampp. Đổi cổng PORT trong class Constants trong project theo IP của máy. Chạy file app.js băng Git.
+Cài đặt: Cài đặt nodejs, xampp và git. Tạo một Database với tên 'chatwithstranger' trên xampp rồi import file sql. Đổi cổng PORT trong class Constants trong project theo IP của máy. Chạy file app.js băng Git.
 
 
 UI Đăng nhập và Đăng ký
