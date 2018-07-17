@@ -52,3 +52,7 @@ UI Gửi hình ảnh người dùng tự vẽ
 ![alt text](https://github.com/quangtrungkhmt4/ChatWithStranger/blob/master/Screen/sendimageuserdraw.png)
 ![alt text](https://github.com/quangtrungkhmt4/ChatWithStranger/blob/master/Screen/sendimageuserdraw1.png)
 ![alt text](https://github.com/quangtrungkhmt4/ChatWithStranger/blob/master/Screen/showimage1.png)
+
+UI Notification thông báo có tin nhắn mới
+
+![alt text](https://github.com/quangtrungkhmt4/ChatWithStranger/blob/master/Screen/noti.PNG)
